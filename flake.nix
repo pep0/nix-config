@@ -12,7 +12,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Hardware quirks for the ThinkPad P14s Gen 5 (Intel).
+    # Hardware quirks for ThinkPads, MacBooks, etc. Per-host modules
+    # are imported from the relevant hosts/<name>/default.nix file.
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
     # Use the flake's Hyprland — the devs explicitly recommend this over
@@ -53,20 +54,15 @@
         overlays = [ rust-overlay.overlays.default ];
         config.allowUnfree = true;
       };
-    in
-    {
-      # ---------------------------------------------------------------
-      # System: `nh os switch .` (or sudo nixos-rebuild switch --flake .#default)
-      # ---------------------------------------------------------------
-      nixosConfigurations.default = nixpkgs.lib.nixosSystem {
+
+      # One entry per host. Hardware-specific modules live inside the
+      # host file (hosts/<name>/default.nix); this helper just stitches
+      # in home-manager + the shared specialArgs.
+      mkSystem = hostPath: nixpkgs.lib.nixosSystem {
         inherit system;
         specialArgs = { inherit inputs; };
         modules = [
-          ./hosts/default
-          # ThinkPad P14s Gen 5 Intel: power management, ACPI, etc.
-          nixos-hardware.nixosModules.lenovo-thinkpad-p14s-intel-gen5
-          lanzaboote.nixosModules.lanzaboote
-
+          hostPath
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
@@ -75,6 +71,16 @@
             home-manager.users.pep0 = import ./modules/home;
           }
         ];
+      };
+    in
+    {
+      # ---------------------------------------------------------------
+      # Systems. Build with `nh os switch .` (uses the current hostname)
+      # or `sudo nixos-rebuild switch --flake .#<name>` to target one
+      # explicitly.
+      # ---------------------------------------------------------------
+      nixosConfigurations = {
+        default = mkSystem ./hosts/default;   # ThinkPad P14s Gen 5 (Intel)
       };
 
       # ---------------------------------------------------------------

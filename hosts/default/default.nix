@@ -1,8 +1,13 @@
-{ ... }:
+{ pkgs, inputs, ... }:
 {
   imports = [
     # Generated for you by `nixos-generate-config` during install.
     ./hardware-configuration.nix
+
+    # Hardware: ThinkPad P14s Gen 5 Intel — power management, ACPI,
+    # firmware, PRIME for the hybrid Intel + NVIDIA GPU.
+    inputs.nixos-hardware.nixosModules.lenovo-thinkpad-p14s-intel-gen5
+    inputs.lanzaboote.nixosModules.lanzaboote
 
     ../../modules/system/boot.nix
     ../../modules/system/secureboot.nix
@@ -22,4 +27,29 @@
   # Set this to the release you first installed and never touch it again
   # — it pins stateful defaults (database formats, etc).
   system.stateVersion = "25.11";
+
+  # ---------------------------------------------------------------
+  # GPU: hybrid Intel iGPU + NVIDIA dGPU via PRIME offload. Only
+  # processes launched with `nvidia-offload` actually hit the dGPU;
+  # display + the rest of the desktop runs on Intel.
+  # ---------------------------------------------------------------
+  hardware.graphics.extraPackages = with pkgs; [
+    # iHD: Intel media driver for HEVC/AV1 decode on modern (Broadwell+)
+    # iGPUs. Pairs with LIBVA_DRIVER_NAME below.
+    intel-media-driver
+    vaapiVdpau
+    libvdpau-va-gl
+  ];
+
+  environment.sessionVariables = {
+    LIBVA_DRIVER_NAME = "iHD";
+    GBM_BACKEND = "nvidia-drm";
+    __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+    NVD_BACKEND = "direct";
+  };
+
+  # Free win from nixos-hardware: adds a "battery-saver" generation to
+  # the boot menu that boots with the dGPU fully off, for max battery
+  # on the road.
+  hardware.nvidia.primeBatterySaverSpecialisation = true;
 }
