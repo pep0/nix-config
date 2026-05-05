@@ -60,7 +60,7 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.extraSpecialArgs = { inherit inputs; };
-            home-manager.users.tuna = import ./modules/home;
+            home-manager.users.pep0 = import ./modules/home;
           }
         ];
       };

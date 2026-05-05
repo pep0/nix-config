@@ -6,8 +6,8 @@
     ./hyprland.nix
   ];
 
-  home.username = "tuna";
-  home.homeDirectory = "/home/tuna";
+  home.username = "pep0";
+  home.homeDirectory = "/home/pep0";
 
   # Match this to system.stateVersion in hosts/default.
   # Same warning: set once at install, never change.

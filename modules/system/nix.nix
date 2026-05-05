@@ -27,7 +27,7 @@
     enable = true;
     clean.enable = true;
     clean.extraArgs = "--keep-since 14d --keep 5";
-    flake = "/home/tuna/nix-config";  # set NH_FLAKE so `nh os switch` works without args
+    flake = "/home/pep0/nix-config";  # set NH_FLAKE so `nh os switch` works without args
   };
 
   nixpkgs.config.allowUnfree = true;

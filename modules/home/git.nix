@@ -2,8 +2,8 @@
 {
   programs.git = {
     enable = true;
-    userName = "Tuna";
-    userEmail = "tuna@example.com";  # change me
+    userName = "pep0";
+    userEmail = "pep0@example.com";
 
     delta = {
       enable = true;

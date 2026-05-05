@@ -1,8 +1,8 @@
 { pkgs, ... }:
 {
-  users.users.tuna = {
+  users.users.pep0 = {
     isNormalUser = true;
-    description = "Tuna";
+    description = "pep0";
     extraGroups = [
       "wheel"            # sudo
       "networkmanager"   # nmcli without root
