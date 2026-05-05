@@ -86,6 +86,13 @@ make rollback   # roll system back one generation
 - `SECUREBOOT.md` — Lanzaboote setup walkthrough.
 - `SECRETS.md` — sops-nix bootstrap walkthrough.
 
+## Caveats
+
+- `modules/system/boot.nix` uses `pkgs.linuxPackages_latest`. Bleeding
+  -edge kernels occasionally break the out-of-tree NVIDIA driver — if
+  a rebuild fails on the kernel module, fall back to `linuxPackages`
+  (LTS) until the driver catches up.
+
 To add a second machine: copy `hosts/default/` to `hosts/laptop/`,
 adjust hardware-configuration, and add a second entry to
 `nixosConfigurations` in `flake.nix`.
