@@ -81,6 +81,7 @@
       # ---------------------------------------------------------------
       nixosConfigurations = {
         default = mkSystem ./hosts/default;   # ThinkPad P14s Gen 5 (Intel)
+        macbook = mkSystem ./hosts/macbook;   # MacBook Pro Mid 2014, 13" (MacBookPro11,1)
       };
 
       # ---------------------------------------------------------------

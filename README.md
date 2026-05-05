@@ -1,17 +1,22 @@
 # nix-config
 
-Single-repo NixOS configuration for a ThinkPad P14s Gen 5 (Intel).
-The flake exposes two outputs:
+Multi-host NixOS configuration. The flake exposes:
 
-- `nixosConfigurations.default` — the system, built with `nh os switch`.
+- `nixosConfigurations.default` — ThinkPad P14s Gen 5 (Intel), with
+  Lanzaboote Secure Boot and PRIME-offload NVIDIA dGPU.
+- `nixosConfigurations.macbook` — MacBook Pro Mid 2014, 13" Retina
+  (MacBookPro11,1), Haswell + Intel Iris 5100 only.
 - `packages.x86_64-linux.profile` — a user-level toolset, installable
   on any Linux machine with the Nix package manager.
 
+`nh os switch .` picks the entry whose name matches the current
+hostname; pass `.#<name>` to target one explicitly.
+
 ## Edit before installing
 
-- `hosts/default/default.nix` — `networking.hostName`.
+- `hosts/<name>/default.nix` — `networking.hostName`.
 - `modules/system/users.nix` — username (also update `flake.nix`'s
-  `home-manager.users.tuna` and `modules/home/default.nix`'s
+  `home-manager.users.pep0` and `modules/home/default.nix`'s
   `home.username` / `homeDirectory` to match).
 - `modules/system/nix.nix` — `programs.nh.flake` path (the place you'll
   clone this repo to).
@@ -22,9 +27,10 @@ The flake exposes two outputs:
   Tokyo Night.
 - `.sops.yaml` — replace the placeholder age public key with one you
   generated. See `SECRETS.md` for the bootstrap.
-- `hosts/default/hardware-configuration.nix` — generated with
-  `nixos-generate-config --root /mnt` during install. Drop it in
-  `hosts/default/`.
+- `hosts/<name>/hardware-configuration.nix` — generated with
+  `nixos-generate-config --root /mnt` during install. Drop it in the
+  host directory you're targeting (`hosts/default/` for the ThinkPad,
+  `hosts/macbook/` for the MacBook).
 - LUKS in `modules/system/boot.nix` — uncomment and fill the UUID, or
   delete and let `hardware-configuration.nix` own it.
 
@@ -46,9 +52,9 @@ The flake exposes two outputs:
    nixos-generate-config --root /mnt
    ```
 4. Clone this repo into `/mnt/etc/nixos`, copy the generated
-   `hardware-configuration.nix` into `hosts/default/`, then:
+   `hardware-configuration.nix` into the target `hosts/<name>/`, then:
    ```
-   nixos-install --flake /mnt/etc/nixos#default
+   nixos-install --flake /mnt/etc/nixos#<name>     # default | macbook
    ```
 5. Reboot, log in, set a password.
 6. (Optional but recommended) Follow `SECUREBOOT.md` to enable
@@ -70,11 +76,14 @@ make rollback   # roll system back one generation
 
 ## Layout
 
-- `flake.nix` — both outputs.
-- `hosts/default/` — per-machine system config + hardware-configuration.
-- `modules/system/` — system modules (boot, networking, secureboot,
-  security, …).
-- `modules/desktop/` — Hyprland + login manager + portals + GPU env.
+- `flake.nix` — outputs and the `mkSystem` helper that wires each host.
+- `hosts/default/` — ThinkPad P14s Gen 5: NVIDIA PRIME, Lanzaboote.
+- `hosts/macbook/` — MacBook Pro Mid 2014: broadcom-sta Wi-Fi, mbpfan,
+  no Lanzaboote (Apple firmware doesn't enroll user keys).
+- `modules/system/` — generic system modules (boot, networking,
+  secureboot, security, …) shared across hosts.
+- `modules/desktop/` — Hyprland + login manager + portals. Hardware-
+  specific GPU env vars live in the host file, not here.
 - `modules/home/` — home-manager modules for user dotfiles.
 - `modules/theme/` — explicit color palette referenced where stylix's
   scheme can't reach (e.g. ad-hoc Hyprland border gradients). Stylix
@@ -93,6 +102,6 @@ make rollback   # roll system back one generation
   a rebuild fails on the kernel module, fall back to `linuxPackages`
   (LTS) until the driver catches up.
 
-To add a second machine: copy `hosts/default/` to `hosts/laptop/`,
-adjust hardware-configuration, and add a second entry to
-`nixosConfigurations` in `flake.nix`.
+To add a third machine: copy a `hosts/<name>/` directory, swap the
+nixos-hardware module + GPU bits in its `default.nix`, then add one
+line to `nixosConfigurations` in `flake.nix`.
