@@ -12,6 +12,7 @@
     ../../modules/system/users.nix
     ../../modules/system/audio.nix
     ../../modules/system/security.nix
+    ../../modules/system/secrets.nix
     ../../modules/system/stylix.nix
     ../../modules/desktop/hyprland.nix
   ];

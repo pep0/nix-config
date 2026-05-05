@@ -20,6 +20,8 @@ The flake exposes two outputs:
 - `modules/system/stylix.nix` — replace the placeholder wallpaper with
   your own image; pick a different `base16Scheme` if you don't want
   Catppuccin Mocha.
+- `.sops.yaml` — replace the placeholder age public key with one you
+  generated. See `SECRETS.md` for the bootstrap.
 - `hosts/default/hardware-configuration.nix` — generated with
   `nixos-generate-config --root /mnt` during install. Drop it in
   `hosts/default/`.
@@ -78,8 +80,11 @@ make rollback   # roll system back one generation
   scheme can't reach (e.g. ad-hoc Hyprland border gradients). Stylix
   is the primary theme source — see `modules/system/stylix.nix`.
 - `profile/` — the user-level package set.
+- `secrets/` — sops-encrypted secret files (the encrypted blobs are
+  safe to commit).
 - `Makefile` — workflow wrappers.
 - `SECUREBOOT.md` — Lanzaboote setup walkthrough.
+- `SECRETS.md` — sops-nix bootstrap walkthrough.
 
 To add a second machine: copy `hosts/default/` to `hosts/laptop/`,
 adjust hardware-configuration, and add a second entry to
