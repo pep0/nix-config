@@ -12,15 +12,15 @@
 
     # Pinning the scheme keeps colors stable regardless of the wallpaper.
     # base16-schemes ships hundreds of YAML schemes — swap the filename
-    # to e.g. `tokyo-night-dark.yaml` or `gruvbox-dark-medium.yaml` to
-    # change the entire system theme.
-    base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-mocha.yaml";
+    # to e.g. `catppuccin-mocha.yaml`, `gruvbox-dark-medium.yaml`, or
+    # `tokyo-night-storm.yaml` to change the entire system theme.
+    base16Scheme = "${pkgs.base16-schemes}/share/themes/tokyo-night-dark.yaml";
 
     # Stylix requires an `image` (used as desktop wallpaper). With a
     # base16Scheme set, the image isn't used to derive colors. Replace
-    # this 1x1 placeholder with your real wallpaper.
+    # this solid-color placeholder with your real wallpaper.
     image = pkgs.runCommand "wallpaper.png" { } ''
-      ${pkgs.imagemagick}/bin/convert -size 1920x1080 xc:'#1e1e2e' $out
+      ${pkgs.imagemagick}/bin/convert -size 1920x1080 xc:'#1a1b26' $out
     '';
 
     fonts = {

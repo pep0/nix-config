@@ -19,7 +19,7 @@ The flake exposes two outputs:
 - `modules/home/git.nix` — name and email.
 - `modules/system/stylix.nix` — replace the placeholder wallpaper with
   your own image; pick a different `base16Scheme` if you don't want
-  Catppuccin Mocha.
+  Tokyo Night.
 - `.sops.yaml` — replace the placeholder age public key with one you
   generated. See `SECRETS.md` for the bootstrap.
 - `hosts/default/hardware-configuration.nix` — generated with

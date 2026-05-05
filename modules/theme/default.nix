@@ -2,40 +2,41 @@
   # Centralized color palette. Reference from any module via
   # `(import ../theme).colors.foo` or by passing it through specialArgs.
   #
-  # I picked Catppuccin Mocha here — swap to Tokyo Night / Gruvbox /
-  # whatever by replacing this attrset; everything that references it
-  # picks up the change.
+  # Currently Tokyo Night Dark — to switch palettes, replace the values
+  # below and update `stylix.base16Scheme` in modules/system/stylix.nix
+  # to match. The names are catppuccin-flavored aliases so the rest of
+  # the config doesn't need to know which palette is loaded.
   colors = {
-    base       = "#1e1e2e";
-    mantle     = "#181825";
-    crust      = "#11111b";
+    base       = "#1a1b26";
+    mantle     = "#16161e";
+    crust      = "#15161e";
 
-    text       = "#cdd6f4";
-    subtext1   = "#bac2de";
-    subtext0   = "#a6adc8";
+    text       = "#c0caf5";
+    subtext1   = "#a9b1d6";
+    subtext0   = "#9aa5ce";
 
-    surface0   = "#313244";
-    surface1   = "#45475a";
-    surface2   = "#585b70";
+    surface0   = "#292e42";
+    surface1   = "#414868";
+    surface2   = "#565f89";
 
-    overlay0   = "#6c7086";
-    overlay1   = "#7f849c";
-    overlay2   = "#9399b2";
+    overlay0   = "#565f89";
+    overlay1   = "#787c99";
+    overlay2   = "#9aa5ce";
 
-    blue       = "#89b4fa";
-    lavender   = "#b4befe";
-    sapphire   = "#74c7ec";
-    sky        = "#89dceb";
-    teal       = "#94e2d5";
-    green      = "#a6e3a1";
-    yellow     = "#f9e2af";
-    peach      = "#fab387";
-    maroon     = "#eba0ac";
-    red        = "#f38ba8";
-    mauve      = "#cba6f7";
-    pink       = "#f5c2e7";
-    flamingo   = "#f2cdcd";
-    rosewater  = "#f5e0dc";
+    blue       = "#7aa2f7";
+    lavender   = "#7dcfff";
+    sapphire   = "#2ac3de";
+    sky        = "#b4f9f8";
+    teal       = "#73daca";
+    green      = "#9ece6a";
+    yellow     = "#e0af68";
+    peach      = "#ff9e64";
+    maroon     = "#f7768e";
+    red        = "#f7768e";
+    mauve      = "#bb9af7";
+    pink       = "#ad8ee6";
+    flamingo   = "#ff9e64";
+    rosewater  = "#f7768e";
   };
 
   fonts = {
