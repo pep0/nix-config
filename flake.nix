@@ -19,10 +19,9 @@
     # the nixpkgs version when bug-hunting.
     hyprland.url = "github:hyprwm/Hyprland";
 
-    # Lanzaboote: Secure Boot for NixOS. Pin to a release tag rather
-    # than master — it's still pre-1.0 and breaking changes happen.
+    # Lanzaboote: Secure Boot for NixOS. Pin to a release tag.
     lanzaboote = {
-      url = "github:nix-community/lanzaboote/v0.4.2";
+      url = "github:nix-community/lanzaboote/v1.0.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
