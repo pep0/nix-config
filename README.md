@@ -17,6 +17,9 @@ The flake exposes two outputs:
   clone this repo to).
 - `modules/system/locale.nix` — timezone.
 - `modules/home/git.nix` — name and email.
+- `modules/system/stylix.nix` — replace the placeholder wallpaper with
+  your own image; pick a different `base16Scheme` if you don't want
+  Catppuccin Mocha.
 - `hosts/default/hardware-configuration.nix` — generated with
   `nixos-generate-config --root /mnt` during install. Drop it in
   `hosts/default/`.
@@ -71,7 +74,9 @@ make rollback   # roll system back one generation
   security, …).
 - `modules/desktop/` — Hyprland + login manager + portals + GPU env.
 - `modules/home/` — home-manager modules for user dotfiles.
-- `modules/theme/` — central color palette + font choices.
+- `modules/theme/` — explicit color palette referenced where stylix's
+  scheme can't reach (e.g. ad-hoc Hyprland border gradients). Stylix
+  is the primary theme source — see `modules/system/stylix.nix`.
 - `profile/` — the user-level package set.
 - `Makefile` — workflow wrappers.
 - `SECUREBOOT.md` — Lanzaboote setup walkthrough.

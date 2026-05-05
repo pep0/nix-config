@@ -29,9 +29,16 @@
       url = "github:oxalica/rust-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # Stylix: one base16 scheme + font set propagated everywhere
+    # (system, home-manager, hyprland, terminals, GTK, Qt, ...).
+    stylix = {
+      url = "github:danth/stylix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, home-manager, nixos-hardware, hyprland, lanzaboote, rust-overlay, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, nixos-hardware, hyprland, lanzaboote, rust-overlay, stylix, ... }@inputs:
     let
       system = "x86_64-linux";
 

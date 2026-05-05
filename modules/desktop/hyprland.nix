@@ -63,11 +63,11 @@
   # manager, etc). Without this, prompts silently fail under Hyprland.
   security.polkit.enable = true;
 
+  # Stylix installs the monospace/sans/serif/emoji packages declared in
+  # its config — only add fonts here that stylix doesn't manage (e.g.
+  # CJK, symbols-only).
   fonts.packages = with pkgs; [
-    noto-fonts
-    noto-fonts-emoji
     noto-fonts-cjk-sans
-    nerd-fonts.jetbrains-mono
     nerd-fonts.symbols-only
   ];
 }
