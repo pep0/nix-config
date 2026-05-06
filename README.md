@@ -1,107 +1,141 @@
 # nix-config
 
-Multi-host NixOS configuration. The flake exposes:
+:snowflake: Personal [NixOS](https://nixos.org/) configuration for
+multiple machines. Built on [Flakes](https://nixos.wiki/wiki/Flakes),
+[Home Manager](https://github.com/nix-community/home-manager),
+[Stylix](https://github.com/danth/stylix), and
+[sops-nix](https://github.com/Mic92/sops-nix).
 
-- `nixosConfigurations.default` — ThinkPad P14s Gen 5 (Intel), with
-  Lanzaboote Secure Boot and PRIME-offload NVIDIA dGPU.
-- `nixosConfigurations.macbook` — MacBook Pro Mid 2014, 13" Retina
-  (MacBookPro11,1), Haswell + Intel Iris 5100 only.
-- `packages.x86_64-linux.profile` — a user-level toolset, installable
-  on any Linux machine with the Nix package manager.
+## Features
 
-`nh os switch .` picks the entry whose name matches the current
-hostname; pass `.#<name>` to target one explicitly.
+- **Window Manager**: Hyprland (Wayland) with `greetd` + `tuigreet`
+  TTY login, Tokyo Night theme via Stylix
+- **Terminal**: Kitty + Nushell with Starship prompt, Carapace
+  completions, direnv integration
+- **Editor**: Helix with `nil` for Nix LSP
+- **Development**: Rust toolchain (rust-overlay), `nh` for rebuilds,
+  `devenv` for project shells
+- **Tools**: Claude Code, Lazygit, Yazi, ripgrep, fd, bat, jq, btop,
+  nvtop, fastfetch
+- **Theming**: Stylix-driven, single source of truth
+- **Security**: Secure Boot via Lanzaboote (where supported), full-disk
+  encryption (LUKS), AppArmor, auditd
+- **Secrets**: sops-nix with age encryption
 
-## Edit before installing
+## Hardware
 
-- `hosts/<name>/default.nix` — `networking.hostName`.
-- `modules/system/users.nix` — username (also update `flake.nix`'s
-  `home-manager.users.pep0` and `modules/home/default.nix`'s
-  `home.username` / `homeDirectory` to match).
-- `modules/system/nix.nix` — `programs.nh.flake` path (the place you'll
-  clone this repo to).
-- `modules/system/locale.nix` — timezone.
-- `modules/home/git.nix` — name and email.
-- `modules/system/stylix.nix` — replace the placeholder wallpaper with
-  your own image; pick a different `base16Scheme` if you don't want
-  Tokyo Night.
-- `.sops.yaml` — replace the placeholder age public key with one you
-  generated. See `SECRETS.md` for the bootstrap.
-- `hosts/<name>/hardware-configuration.nix` — generated with
-  `nixos-generate-config --root /mnt` during install. Drop it in the
-  host directory you're targeting (`hosts/default/` for the ThinkPad,
-  `hosts/macbook/` for the MacBook).
-- LUKS in `modules/system/boot.nix` — uncomment and fill the UUID, or
-  delete and let `hardware-configuration.nix` own it.
+The flake exposes one entry per machine:
 
-## First-time install
+| Host      | Model                                       | Notes                                      |
+| :-------- | :------------------------------------------ | :----------------------------------------- |
+| `default` | ThinkPad P14s Gen 5 (Intel)                 | Lanzaboote Secure Boot, NVIDIA PRIME       |
+| `macbook` | MacBook Pro Mid 2014, 13" (MacBookPro11,1)  | Broadcom STA Wi-Fi, mbpfan, no Lanzaboote  |
 
-1. Boot the NixOS installer ISO (use the unstable image — this config
-   tracks unstable for Lanzaboote support).
-2. Partition and format. For LUKS:
-   ```
-   cryptsetup luksFormat /dev/nvme0n1p2
-   cryptsetup open /dev/nvme0n1p2 cryptroot
-   mkfs.ext4 -L nixos /dev/mapper/cryptroot
-   mount /dev/disk/by-label/nixos /mnt
-   mkfs.fat -F32 -n boot /dev/nvme0n1p1
-   mkdir -p /mnt/boot && mount /dev/disk/by-label/boot /mnt/boot
-   ```
-3. Generate hardware config:
-   ```
-   nixos-generate-config --root /mnt
-   ```
-4. Clone this repo into `/mnt/etc/nixos`, copy the generated
-   `hardware-configuration.nix` into the target `hosts/<name>/`, then:
-   ```
-   nixos-install --flake /mnt/etc/nixos#<name>     # default | macbook
-   ```
-5. Reboot, log in, set a password.
-6. (Optional but recommended) Follow `SECUREBOOT.md` to enable
-   Lanzaboote / Secure Boot.
+`nh os switch .` picks the entry matching the current hostname; pass
+`.#<name>` to target one explicitly.
 
-## Day-to-day
+## Prerequisites
 
-```
-make system     # rebuild + switch the OS (nh os switch .)
-make home       # rebuild + switch home-manager
-make profile    # install/upgrade the user profile
-make update     # update flake.lock
-make diff       # dry-build, show what would change
-make clean      # garbage-collect old generations
-make rollback   # roll system back one generation
-```
+- Git
+- [nh](https://github.com/viperML/nh) (NixOS helper) — installed by
+  the flake on first rebuild; bootstrap with `nix-shell -p nh` or use
+  stock `nixos-rebuild` for the very first switch
+- [NixOS](https://nixos.org/) installed (only for the system part —
+  the user profile works on any Linux with Nix)
 
-`make` with no args lists everything.
+For a fresh install or migrating from a different config, see
+[INSTALL.md](INSTALL.md).
 
-## Layout
+## Directory Structure
 
-- `flake.nix` — outputs and the `mkSystem` helper that wires each host.
-- `hosts/default/` — ThinkPad P14s Gen 5: NVIDIA PRIME, Lanzaboote.
-- `hosts/macbook/` — MacBook Pro Mid 2014: broadcom-sta Wi-Fi, mbpfan,
-  no Lanzaboote (Apple firmware doesn't enroll user keys).
+- `flake.nix` — outputs and the `mkSystem` helper that wires each host
+- `flake.lock` — pinned input versions
+- `hosts/default/` — ThinkPad-specific: PRIME, Lanzaboote
+- `hosts/macbook/` — MacBook-specific: broadcom-sta, mbpfan
 - `modules/system/` — generic system modules (boot, networking,
-  secureboot, security, …) shared across hosts.
-- `modules/desktop/` — Hyprland + login manager + portals. Hardware-
-  specific GPU env vars live in the host file, not here.
-- `modules/home/` — home-manager modules for user dotfiles.
-- `modules/theme/` — explicit color palette referenced where stylix's
-  scheme can't reach (e.g. ad-hoc Hyprland border gradients). Stylix
-  is the primary theme source — see `modules/system/stylix.nix`.
-- `profile/` — the user-level package set.
-- `secrets/` — sops-encrypted secret files (the encrypted blobs are
-  safe to commit).
-- `Makefile` — workflow wrappers.
-- `SECUREBOOT.md` — Lanzaboote setup walkthrough.
-- `SECRETS.md` — sops-nix bootstrap walkthrough.
+  secrets, stylix, …)
+- `modules/desktop/` — Hyprland + login manager + portals
+- `modules/home/` — home-manager modules (shell, git, hyprland)
+- `modules/theme/` — color palette aliases for places stylix can't
+  reach (e.g. ad-hoc Hyprland border gradients)
+- `profile/` — user-level package set (installable on any Nix-enabled
+  Linux)
+- `secrets/` — sops-encrypted secret files (encrypted blobs are safe
+  to commit)
+- `Makefile` — convenience wrappers
+- [INSTALL.md](INSTALL.md) — first-time install / migration walkthrough
+- [SECUREBOOT.md](SECUREBOOT.md) — Lanzaboote enrolment walkthrough
+- [SECRETS.md](SECRETS.md) — sops-nix bootstrap walkthrough
+
+## Installation
+
+See [INSTALL.md](INSTALL.md). Once you're already on NixOS:
+
+1. Clone this repo
+1. Drop your `hardware-configuration.nix` into `hosts/<name>/`
+1. Run `make system` to apply the system config
+1. Run `make home` to apply home-manager
+
+## Update
+
+1. Run `make update` to refresh `flake.lock`
+1. Run `make system` to rebuild the system against the new lock
+1. Run `make home` to do the same for home-manager
+
+## Maintenance
+
+1. Run `make diff` to dry-build and see what would change without
+   applying
+1. Run `make rollback` to revert to the previous system generation
+1. Run `make clean` to garbage-collect (keeps last 5 generations and
+   everything from the last 14 days)
 
 ## Caveats
 
-- `modules/system/boot.nix` uses `pkgs.linuxPackages_latest`. Bleeding
-  -edge kernels occasionally break the out-of-tree NVIDIA driver — if
-  a rebuild fails on the kernel module, fall back to `linuxPackages`
-  (LTS) until the driver catches up.
+- `modules/system/boot.nix` uses `pkgs.linuxPackages_latest`.
+  Bleeding-edge kernels occasionally break the out-of-tree NVIDIA
+  driver — if a rebuild fails on the kernel module, fall back to
+  `linuxPackages` (LTS) until the driver catches up.
 
-To add a third machine: copy a `hosts/<name>/` directory, swap the
-nixos-hardware module + GPU bits in its `default.nix`, then add one
-line to `nixosConfigurations` in `flake.nix`.
+## Colors
+
+The whole setup follows the
+[Tokyo Night](https://github.com/folke/tokyonight.nvim) palette via
+Stylix. Swap `base16Scheme` in `modules/system/stylix.nix` to change
+it; the manual aliases in `modules/theme/default.nix` should be kept
+in lockstep.
+
+| Purpose    | Color     |
+| :--------- | :-------- |
+| Foreground | `#c0caf5` |
+| Background | `#1a1b26` |
+| Primary    | `#bb9af7` |
+| Warning    | `#e0af68` |
+| Danger     | `#f7768e` |
+
+## Key Bindings
+
+| Function                      | Keys                            |
+| :---------------------------- | :------------------------------ |
+| Open Terminal                 | `Super + Q`                     |
+| Kill Active Window            | `Super + C`                     |
+| Open App Launcher             | `Super + R`                     |
+| Exit Hyprland                 | `Super + M`                     |
+| Focus Window                  | `Super + [Arrow]`               |
+| Switch to Workspace           | `Super + [1-4]`                 |
+| Move Window to Workspace      | `Super + Shift + [1-4]`         |
+| Move Window                   | `Super + Left Mouse Button`     |
+| Resize Window                 | `Super + Right Mouse Button`    |
+
+## Terminal Commands
+
+| Function                  | Command           |
+| :------------------------ | :---------------- |
+| Open Agentic Coding Tool  | `a` (Claude Code) |
+| Open Text Editor          | `e` (Helix)       |
+| Open File Manager         | `f` (Yazi)        |
+| Open Git Browser          | `g` (Lazygit)     |
+| List Directory Contents   | `l` (ls)          |
+| Open System Monitor       | `m` (btop)        |
+| Open File                 | `o` (xdg-open)    |
+| Open Task Manager         | `t` (Taskwarrior) |
