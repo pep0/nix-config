@@ -37,7 +37,7 @@
     # iHD: Intel media driver for HEVC/AV1 decode on modern (Broadwell+)
     # iGPUs. Pairs with LIBVA_DRIVER_NAME below.
     intel-media-driver
-    vaapiVdpau
+    libva-vdpau-driver
     libvdpau-va-gl
   ];
 

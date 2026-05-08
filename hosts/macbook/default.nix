@@ -35,7 +35,7 @@
   # ---------------------------------------------------------------
   hardware.graphics.extraPackages = with pkgs; [
     intel-vaapi-driver
-    vaapiVdpau
+    libva-vdpau-driver
     libvdpau-va-gl
   ];
 
@@ -51,6 +51,12 @@
   boot.extraModulePackages = [ config.boot.kernelPackages.broadcom_sta ];
   # Block the in-tree drivers so they don't fight `wl` for the device.
   boot.blacklistedKernelModules = [ "b43" "bcma" "brcmfmac" "brcmsmac" ];
+
+  # broadcom-sta is unmaintained and flagged insecure by nixpkgs. It's
+  # the only Wi-Fi option for BCM4360 — accepting that risk knowingly.
+  nixpkgs.config.permittedInsecurePackages = [
+    "broadcom-sta-6.30.223.271-59-7.0.3"
+  ];
 
   # ---------------------------------------------------------------
   # Thermals: Linux's default fan curve runs the MacBook hotter than
