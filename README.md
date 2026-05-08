@@ -8,8 +8,9 @@ multiple machines. Built on [Flakes](https://nixos.wiki/wiki/Flakes),
 
 ## Features
 
-- **Window Manager**: Hyprland (Wayland) with `greetd` + `tuigreet`
-  TTY login, Tokyo Night theme via Stylix
+- **Window Managers**: Hyprland and niri (scrollable-tiling), picked
+  at the `greetd` + `tuigreet` TTY login. Both themed Tokyo Night
+  via Stylix.
 - **Terminal**: Kitty + Nushell with Starship prompt, Carapace
   completions, direnv integration
 - **Editor**: Helix with `nil` for Nix LSP
@@ -115,15 +116,33 @@ in lockstep.
 
 ## Key Bindings
 
+Shared between both compositors:
+
 | Function                      | Keys                            |
 | :---------------------------- | :------------------------------ |
 | Open Terminal                 | `Super + Q`                     |
 | Kill Active Window            | `Super + C`                     |
 | Open App Launcher             | `Super + R`                     |
-| Exit Hyprland                 | `Super + M`                     |
+| Exit Compositor               | `Super + M`                     |
 | Focus Window                  | `Super + [Arrow]`               |
 | Switch to Workspace           | `Super + [1-4]`                 |
 | Move Window to Workspace      | `Super + Shift + [1-4]`         |
+
+niri-only (scrollable-tiling specifics):
+
+| Function                      | Keys                            |
+| :---------------------------- | :------------------------------ |
+| Move Column / Window          | `Super + Shift + [Arrow]`       |
+| Cycle Preset Column Widths    | `Super + W`                     |
+| Maximize Column               | `Super + F`                     |
+| Fullscreen Window             | `Super + Shift + F`             |
+| Take Screenshot               | `Print`                         |
+| Lock Screen                   | `Super + Ctrl + Q`              |
+
+Hyprland-only (mouse interactions):
+
+| Function                      | Keys                            |
+| :---------------------------- | :------------------------------ |
 | Move Window                   | `Super + Left Mouse Button`     |
 | Resize Window                 | `Super + Right Mouse Button`    |
 

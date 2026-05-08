@@ -21,7 +21,9 @@
     ../../modules/system/security.nix
     ../../modules/system/secrets.nix
     ../../modules/system/stylix.nix
+    ../../modules/desktop                 # generic Wayland infrastructure
     ../../modules/desktop/hyprland.nix
+    ../../modules/desktop/niri.nix
   ];
 
   networking.hostName = "macbook";

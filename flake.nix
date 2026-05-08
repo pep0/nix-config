@@ -43,9 +43,16 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # niri-flake: scrollable-tiling Wayland compositor. Coexists with
+    # Hyprland — both are listed at the greetd login picker.
+    niri = {
+      url = "github:sodiboo/niri-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, home-manager, nixos-hardware, hyprland, lanzaboote, rust-overlay, stylix, sops-nix, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, nixos-hardware, hyprland, lanzaboote, rust-overlay, stylix, sops-nix, niri, ... }@inputs:
     let
       system = "x86_64-linux";
 
