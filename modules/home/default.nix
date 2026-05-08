@@ -5,6 +5,7 @@
     ./git.nix
     ./hyprland.nix
     ./niri.nix
+    ./browser.nix
   ];
 
   home.username = "pep0";

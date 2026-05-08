@@ -50,9 +50,16 @@
       url = "github:sodiboo/niri-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # zen-browser: Firefox fork with a modern UI. Not yet in nixpkgs;
+    # this flake ships pinned binaries.
+    zen-browser = {
+      url = "github:0xc000022070/zen-browser-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, home-manager, nixos-hardware, hyprland, lanzaboote, rust-overlay, stylix, sops-nix, niri, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, nixos-hardware, hyprland, lanzaboote, rust-overlay, stylix, sops-nix, niri, zen-browser, ... }@inputs:
     let
       system = "x86_64-linux";
 

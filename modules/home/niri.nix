@@ -65,6 +65,7 @@ in
         // App launches — match Hyprland's bindings where it makes sense.
         Mod+Q { spawn "kitty"; }
         Mod+R { spawn "wofi" "--show" "drun"; }
+        Mod+B { spawn "zen"; }
         Mod+C { close-window; }
         Mod+M { quit; }
 

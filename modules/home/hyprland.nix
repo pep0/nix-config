@@ -42,6 +42,7 @@ in
         "$mod, C, killactive"
         "$mod, M, exit"
         "$mod, R, exec, $menu"
+        "$mod, B, exec, zen"
 
         "$mod, left,  movefocus, l"
         "$mod, right, movefocus, r"
