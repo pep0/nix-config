@@ -87,7 +87,9 @@
       # ---------------------------------------------------------------
       # User profile: `nix profile install .#profile`
       # ---------------------------------------------------------------
-      packages.${system}.profile = import ./profile { inherit pkgs; };
-      packages.${system}.default = self.packages.${system}.profile;
+      packages.${system} = {
+        profile = import ./profile { inherit pkgs; };
+        default = self.packages.${system}.profile;
+      };
     };
 }
