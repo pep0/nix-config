@@ -20,6 +20,11 @@ Lanzaboote on the ThinkPad.
 - `modules/home/` — home-manager modules
 - `profile/` — user-level package set, installable on any Nix-enabled Linux
 
+Keybindings live in `modules/home/hyprland.nix` and
+`modules/home/niri.nix`; shell aliases in `modules/home/shell.nix`.
+Theme is set by `modules/system/stylix.nix` (the `base16Scheme` line),
+with manual color aliases in `modules/theme/default.nix`.
+
 ## Daily
 
 ```
