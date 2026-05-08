@@ -1,24 +1,13 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 let
-  theme = import ../theme;
+  c = name: "#${config.lib.stylix.colors.${name}}";
 in
 {
   # niri-flake's home-manager module is auto-propagated by the system
-  # module (modules/desktop/niri.nix) — don't import it again here.
-  # It owns ~/.config/niri/config.kdl and lets stylix layer its
-  # theming on top.
+  # module (modules/desktop/niri.nix). Shared apps live in
+  # modules/home/wayland-apps.nix; this file is niri-only.
 
-  home.packages = with pkgs; [
-    # Default-binding apps need to exist on PATH at session start.
-    kitty
-    wofi
-    waybar
-    grim
-    slurp
-    wl-clipboard
-    swaybg            # niri doesn't paint a background itself
-    swaylock          # for the lock-screen bind
-  ];
+  home.packages = with pkgs; [ wofi ];
 
   programs.niri.config = ''
     // See https://github.com/YaLTeR/niri/wiki/Configuration%3A-Overview
@@ -52,14 +41,13 @@ in
         default-column-width { proportion 0.5; }
         focus-ring {
             width 2
-            active-color "${theme.colors.mauve}"
-            inactive-color "${theme.colors.surface0}"
+            active-color "${c "base0E"}"
+            inactive-color "${c "base02"}"
         }
     }
 
     prefer-no-csd
     spawn-at-startup "waybar"
-    spawn-at-startup "swaybg" "-i" "/dev/null" "-c" "${theme.colors.base}"
 
     binds {
         // App launches — match Hyprland's bindings where it makes sense.
@@ -96,10 +84,8 @@ in
         Mod+F { maximize-column; }
         Mod+Shift+F { fullscreen-window; }
 
-        // Screenshot
+        // Screenshot + lock
         Print { screenshot; }
-
-        // Lock
         Mod+Ctrl+Q { spawn "swaylock"; }
     }
   '';

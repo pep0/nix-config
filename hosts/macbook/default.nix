@@ -1,4 +1,4 @@
-{ pkgs, lib, config, inputs, ... }:
+{ pkgs, config, inputs, stateVersion, ... }:
 {
   imports = [
     # Generated for you by `nixos-generate-config` during install.
@@ -27,9 +27,7 @@
   ];
 
   networking.hostName = "macbook";
-
-  # Match the release you first installed; never change post-install.
-  system.stateVersion = "25.11";
+  system.stateVersion = stateVersion;
 
   # ---------------------------------------------------------------
   # GPU: Intel Iris 5100 (Haswell) only. The legacy `i965` VAAPI

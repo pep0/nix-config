@@ -1,19 +1,17 @@
-{ ... }:
+{ username, stateVersion, ... }:
 {
   imports = [
     ./shell.nix
     ./git.nix
+    ./wayland-apps.nix
     ./hyprland.nix
     ./niri.nix
     ./browser.nix
   ];
 
-  home.username = "pep0";
-  home.homeDirectory = "/home/pep0";
-
-  # Match this to system.stateVersion in hosts/default.
-  # Same warning: set once at install, never change.
-  home.stateVersion = "25.11";
+  home.username = username;
+  home.homeDirectory = "/home/${username}";
+  home.stateVersion = stateVersion;
 
   programs.home-manager.enable = true;
 }

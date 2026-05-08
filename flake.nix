@@ -26,11 +26,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    rust-overlay = {
-      url = "github:oxalica/rust-overlay";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     # Stylix: one base16 scheme + font set propagated everywhere
     # (system, home-manager, hyprland, terminals, GTK, Qt, ...).
     stylix = {
@@ -59,13 +54,19 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, nixos-hardware, hyprland, lanzaboote, rust-overlay, stylix, sops-nix, niri, zen-browser, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, nixos-hardware, hyprland, lanzaboote, stylix, sops-nix, niri, zen-browser, ... }@inputs:
     let
       system = "x86_64-linux";
 
+      # Single source of truth for the few values that get sprinkled
+      # across host + home modules.
+      username = "pep0";
+      stateVersion = "25.11";
+
+      # Used only for the user `profile` output. System pkgs are
+      # configured per-host via `nixpkgs.config` in modules/system/nix.nix.
       pkgs = import nixpkgs {
         inherit system;
-        overlays = [ rust-overlay.overlays.default ];
         config.allowUnfree = true;
       };
 
@@ -74,15 +75,16 @@
       # in home-manager + the shared specialArgs.
       mkSystem = hostPath: nixpkgs.lib.nixosSystem {
         inherit system;
-        specialArgs = { inherit inputs; };
+        specialArgs = { inherit inputs username stateVersion; };
         modules = [
           hostPath
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.extraSpecialArgs = { inherit inputs; };
-            home-manager.users.pep0 = import ./modules/home;
+            home-manager.backupFileExtension = "hm-bak";
+            home-manager.extraSpecialArgs = { inherit inputs username stateVersion; };
+            home-manager.users.${username} = import ./modules/home;
           }
         ];
       };

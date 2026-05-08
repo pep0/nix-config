@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }:
+{ pkgs, config, inputs, ... }:
 {
   imports = [ inputs.stylix.nixosModules.stylix ];
 
@@ -17,11 +17,10 @@
     base16Scheme = "${pkgs.base16-schemes}/share/themes/tokyo-night-dark.yaml";
 
     # Stylix requires an `image` (used as desktop wallpaper). With a
-    # base16Scheme set, the image isn't used to derive colors. Replace
-    # this solid-color placeholder with your real wallpaper.
-    image = pkgs.runCommand "wallpaper.png" { } ''
-      ${pkgs.imagemagick}/bin/convert -size 1920x1080 xc:'#1a1b26' $out
-    '';
+    # base16Scheme set, the image isn't used to derive colors. The
+    # `pixel` helper returns a 1×1 PNG of the named base16 color —
+    # cheap placeholder until you drop a real wallpaper here.
+    image = config.lib.stylix.pixel "base00";
 
     fonts = {
       monospace = {

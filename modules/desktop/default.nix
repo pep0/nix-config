@@ -4,13 +4,11 @@
   # manager, portals, polkit, fonts. Compositor-specific config lives
   # in sibling modules (hyprland.nix, niri.nix).
 
-  # OpenGL / graphics stack. Required for any Wayland compositor. The
-  # 32-bit shim is for Steam, Wine, etc. Hardware-specific drivers
-  # (intel-media-driver, etc) come from per-host `default.nix`.
-  hardware.graphics = {
-    enable = true;
-    enable32Bit = true;
-  };
+  # OpenGL / graphics stack. Required for any Wayland compositor.
+  # Hardware-specific drivers (intel-media-driver, etc) come from
+  # per-host `default.nix`. Re-enable `enable32Bit` if you ever add
+  # Steam/Wine.
+  hardware.graphics.enable = true;
 
   # greetd + tuigreet: minimal TTY-style login manager. Without --cmd
   # we get a session picker — the user arrows between Hyprland / niri.

@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, username, ... }:
 {
   nix.settings = {
     experimental-features = [ "nix-command" "flakes" ];
@@ -27,7 +27,7 @@
     enable = true;
     clean.enable = true;
     clean.extraArgs = "--keep-since 14d --keep 5";
-    flake = "/home/pep0/nix-config";  # set NH_FLAKE so `nh os switch` works without args
+    flake = "/home/${username}/nix-config";  # NH_FLAKE so `nh os switch` works without args
   };
 
   nixpkgs.config.allowUnfree = true;

@@ -1,17 +1,17 @@
-{ pkgs, lib, inputs, ... }:
+{ pkgs, lib, config, inputs, ... }:
 let
-  theme = import ../theme;
-  # Hyprland wants colors as `rgb(rrggbb)` — strip the `#` and wrap.
-  rgb = c: "rgb(${builtins.substring 1 6 c})";
+  # Stylix exposes the loaded base16 scheme as plain hex strings (no `#`).
+  # Hyprland wants `rgb(rrggbb)`.
+  c = name: "rgb(${config.lib.stylix.colors.${name}})";
 in
 {
+  # Hyprland-only extras. Shared apps live in modules/home/wayland-apps.nix.
+  home.packages = with pkgs; [ wofi ];
+
   wayland.windowManager.hyprland = {
     enable = true;
-    # Same package as the system module — keeps versions in lockstep.
     package = inputs.hyprland.packages.${pkgs.system}.hyprland;
 
-    # Minimal sane defaults. Once you boot in, use `hyprctl monitors`
-    # to see what's connected and edit accordingly.
     settings = {
       monitor = ",preferred,auto,1";
 
@@ -24,10 +24,11 @@ in
       ];
 
       general = {
-        # mkForce wins the conflict with stylix's hyprland target,
-        # which would otherwise set its own base16-derived border colors.
-        "col.active_border" = lib.mkForce "${rgb theme.colors.mauve} ${rgb theme.colors.blue} 45deg";
-        "col.inactive_border" = lib.mkForce (rgb theme.colors.surface0);
+        # mkForce wins the conflict with stylix's hyprland target so
+        # the gradient survives. base0E = mauve, base0D = blue,
+        # base02 = surface in tinted-theming's base16 mapping.
+        "col.active_border" = lib.mkForce "${c "base0E"} ${c "base0D"} 45deg";
+        "col.inactive_border" = lib.mkForce (c "base02");
         gaps_in = 4;
         gaps_out = 8;
         border_size = 2;
@@ -67,14 +68,4 @@ in
       ];
     };
   };
-
-  # Bare-minimum desktop apps so a fresh login isn't unusable.
-  home.packages = with pkgs; [
-    kitty
-    wofi
-    waybar
-    grim slurp wl-clipboard   # screenshots + clipboard
-    brightnessctl
-    pavucontrol
-  ];
 }

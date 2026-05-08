@@ -1,8 +1,8 @@
-{ ... }:
+{ username, ... }:
 {
   programs.git = {
     enable = true;
-    userName = "pep0";
+    userName = username;
     userEmail = "baschy@msn.com";
 
     delta = {

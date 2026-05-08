@@ -1,8 +1,8 @@
-{ pkgs, ... }:
+{ pkgs, username, ... }:
 {
-  users.users.pep0 = {
+  users.users.${username} = {
     isNormalUser = true;
-    description = "pep0";
+    description = username;
     extraGroups = [
       "wheel"            # sudo
       "networkmanager"   # nmcli without root

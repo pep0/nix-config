@@ -13,11 +13,13 @@ pkgs.buildEnv {
     lazygit
     delta
 
-    # Rust toolchain with rust-analyzer (needs the rust-overlay applied
-    # to `pkgs` in flake.nix)
-    (rust-bin.stable.latest.default.override {
-      extensions = [ "rust-src" "rust-analyzer" ];
-    })
+    # Rust toolchain. Stable nixpkgs versions; for bleeding-edge
+    # toolchains in a project, use a per-project devenv/flake.
+    rustc
+    cargo
+    rust-analyzer
+    rustfmt
+    clippy
 
     # System inspection
     btop

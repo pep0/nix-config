@@ -18,7 +18,7 @@
   #   allowDiscards = true;  # only enable on SSDs
   # };
 
-  # Latest kernel from the flake's pinned nixpkgs. Using `pkgs` (not
-  # `import <nixpkgs>`) keeps the version reproducible via flake.lock.
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  # mkDefault so a host can pin an older kernel if its out-of-tree
+  # modules (e.g. broadcom-sta on the macbook) break on bleeding edge.
+  boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
 }

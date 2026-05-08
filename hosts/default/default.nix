@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }:
+{ pkgs, inputs, stateVersion, ... }:
 {
   imports = [
     # Generated for you by `nixos-generate-config` during install.
@@ -25,10 +25,7 @@
   ];
 
   networking.hostName = "default";
-
-  # Set this to the release you first installed and never touch it again
-  # — it pins stateful defaults (database formats, etc).
-  system.stateVersion = "25.11";
+  system.stateVersion = stateVersion;
 
   # ---------------------------------------------------------------
   # GPU: hybrid Intel iGPU + NVIDIA dGPU via PRIME offload. Only
