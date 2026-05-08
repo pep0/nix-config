@@ -21,6 +21,7 @@
     ../../modules/system/security.nix
     ../../modules/system/secrets.nix
     ../../modules/system/stylix.nix
+    ../../modules/system/bluetooth.nix
     ../../modules/desktop                 # generic Wayland infrastructure
     ../../modules/desktop/hyprland.nix
     ../../modules/desktop/niri.nix
@@ -54,9 +55,15 @@
 
   # broadcom-sta is unmaintained and flagged insecure by nixpkgs. It's
   # the only Wi-Fi option for BCM4360 — accepting that risk knowingly.
-  nixpkgs.config.permittedInsecurePackages = [
-    "broadcom-sta-6.30.223.271-59-7.0.3"
-  ];
+  # Predicate (not a fixed version list) so kernel bumps don't require
+  # updating a version string after every rebuild.
+  nixpkgs.config.allowInsecurePredicate = pkg:
+    pkgs.lib.getName pkg == "broadcom-sta";
+
+  # Pin to LTS — broadcom-sta routinely fails to build against the
+  # latest kernel for weeks after a bump. mkDefault in boot.nix lets
+  # this win.
+  boot.kernelPackages = pkgs.linuxPackages;
 
   # ---------------------------------------------------------------
   # Thermals: Linux's default fan curve runs the MacBook hotter than

@@ -1,6 +1,7 @@
 { pkgs, config, ... }:
 let
   c = name: "#${config.lib.stylix.colors.${name}}";
+  polkitAgent = "${pkgs.lxqt.lxqt-policykit}/libexec/lxqt-policykit-agent";
 in
 {
   # niri-flake's home-manager module is auto-propagated by the system
@@ -48,6 +49,8 @@ in
 
     prefer-no-csd
     spawn-at-startup "waybar"
+    spawn-at-startup "mako"
+    spawn-at-startup "${polkitAgent}"
 
     binds {
         // App launches — match Hyprland's bindings where it makes sense.
@@ -87,6 +90,17 @@ in
         // Screenshot + lock
         Print { screenshot; }
         Mod+Ctrl+Q { spawn "swaylock"; }
+
+        // Media + brightness keys
+        XF86AudioRaiseVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "5%+"; }
+        XF86AudioLowerVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "5%-"; }
+        XF86AudioMute        allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SINK@" "toggle"; }
+        XF86AudioMicMute     allow-when-locked=true { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"; }
+        XF86MonBrightnessUp   allow-when-locked=true { spawn "brightnessctl" "set" "5%+"; }
+        XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "set" "5%-"; }
+        XF86AudioPlay { spawn "playerctl" "play-pause"; }
+        XF86AudioNext { spawn "playerctl" "next"; }
+        XF86AudioPrev { spawn "playerctl" "previous"; }
     }
   '';
 }

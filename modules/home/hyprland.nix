@@ -5,7 +5,8 @@ let
   c = name: "rgb(${config.lib.stylix.colors.${name}})";
 in
 {
-  # Hyprland-only extras. Shared apps live in modules/home/wayland-apps.nix.
+  # Hyprland-only extras. Shared apps (kitty, waybar, mako, swayidle …)
+  # live in modules/home/wayland-apps.nix.
   home.packages = with pkgs; [ wofi ];
 
   wayland.windowManager.hyprland = {
@@ -21,6 +22,8 @@ in
 
       exec-once = [
         "waybar"
+        "mako"
+        "${pkgs.lxqt.lxqt-policykit}/libexec/lxqt-policykit-agent"
       ];
 
       general = {
@@ -44,6 +47,8 @@ in
         "$mod, M, exit"
         "$mod, R, exec, $menu"
         "$mod, B, exec, zen"
+        "$mod CTRL, Q, exec, swaylock"
+        ", Print, exec, grim -g \"$(slurp)\" - | wl-copy"
 
         "$mod, left,  movefocus, l"
         "$mod, right, movefocus, r"
@@ -59,6 +64,21 @@ in
         "$mod SHIFT, 2, movetoworkspace, 2"
         "$mod SHIFT, 3, movetoworkspace, 3"
         "$mod SHIFT, 4, movetoworkspace, 4"
+      ];
+
+      # Media + brightness keys. `e` (release) lets the bind repeat.
+      bindel = [
+        ", XF86AudioRaiseVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"
+        ", XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
+        ", XF86MonBrightnessUp,   exec, brightnessctl set 5%+"
+        ", XF86MonBrightnessDown, exec, brightnessctl set 5%-"
+      ];
+      bindl = [
+        ", XF86AudioMute,         exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+        ", XF86AudioMicMute,      exec, wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
+        ", XF86AudioPlay,         exec, playerctl play-pause"
+        ", XF86AudioNext,         exec, playerctl next"
+        ", XF86AudioPrev,         exec, playerctl previous"
       ];
 
       # Drag windows with the mouse.

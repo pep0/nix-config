@@ -19,6 +19,7 @@
     ../../modules/system/security.nix
     ../../modules/system/secrets.nix
     ../../modules/system/stylix.nix
+    ../../modules/system/bluetooth.nix
     ../../modules/desktop                 # generic Wayland infrastructure
     ../../modules/desktop/hyprland.nix
     ../../modules/desktop/niri.nix
