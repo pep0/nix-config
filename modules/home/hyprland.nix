@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }:
+{ pkgs, lib, inputs, ... }:
 let
   theme = import ../theme;
   # Hyprland wants colors as `rgb(rrggbb)` — strip the `#` and wrap.
@@ -24,8 +24,10 @@ in
       ];
 
       general = {
-        "col.active_border" = "${rgb theme.colors.mauve} ${rgb theme.colors.blue} 45deg";
-        "col.inactive_border" = rgb theme.colors.surface0;
+        # mkForce wins the conflict with stylix's hyprland target,
+        # which would otherwise set its own base16-derived border colors.
+        "col.active_border" = lib.mkForce "${rgb theme.colors.mauve} ${rgb theme.colors.blue} 45deg";
+        "col.inactive_border" = lib.mkForce (rgb theme.colors.surface0);
         gaps_in = 4;
         gaps_out = 8;
         border_size = 2;
