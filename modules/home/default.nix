@@ -4,6 +4,7 @@
     ./shell.nix
     ./git.nix
     ./wayland-apps.nix
+    ./waybar.nix
     ./hyprland.nix
     ./niri.nix
     ./browser.nix
