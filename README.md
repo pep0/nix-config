@@ -4,8 +4,8 @@ Personal [NixOS](https://nixos.org/) flake for two machines.
 
 | Host      | Target                                      |
 | :-------- | :------------------------------------------ |
-| `default` | ThinkPad P14s Gen 5 (Intel)                 |
-| `macbook` | MacBook Pro Mid 2014, 13" (MacBookPro11,1)  |
+| `vifslan` | ThinkPad P14s Gen 5 (Intel)                 |
+| `tofslan` | MacBook Pro Mid 2014, 13" (MacBookPro11,1)  |
 
 Hyprland and niri coexist as login sessions (picked at greetd), themed
 Tokyo Night via Stylix. Secrets via sops-nix; Secure Boot via

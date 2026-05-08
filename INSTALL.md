@@ -92,7 +92,7 @@ Most of these have placeholder values that you need to swap for your own.
    cp /mnt/etc/nixos/hardware-configuration.nix /mnt/etc/nixos/nix-config/hosts/<name>/
    ```
 
-   Replace `<name>` with `default` (ThinkPad) or `macbook` (MacBook).
+   Replace `<name>` with `vifslan` (ThinkPad) or `tofslan` (MacBook).
 
 1. Install:
 
@@ -187,7 +187,7 @@ exactly as your existing install set them up.
 
 ## Per-host notes
 
-### `default` — ThinkPad P14s Gen 5
+### `vifslan` — ThinkPad P14s Gen 5
 
 - After the first successful install, follow [SECUREBOOT.md](SECUREBOOT.md)
   to enable Lanzaboote (Secure Boot with your own keys).
@@ -195,7 +195,7 @@ exactly as your existing install set them up.
   it only when launched with `nvidia-offload`. A "battery-saver"
   generation in the boot menu turns the dGPU off entirely.
 
-### `macbook` — MacBook Pro Mid 2014, 13" (MacBookPro11,1)
+### `tofslan` — MacBook Pro Mid 2014, 13" (MacBookPro11,1)
 
 - **Wi-Fi during the installer ISO** — `broadcom-sta` isn't shipped
   in the live image. Tether or use Ethernet (see step 3 above).

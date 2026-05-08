@@ -26,7 +26,7 @@
     ../../modules/desktop/niri.nix
   ];
 
-  networking.hostName = "default";
+  networking.hostName = "vifslan";
   system.stateVersion = stateVersion;
 
   # ---------------------------------------------------------------
