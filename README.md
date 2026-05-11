@@ -17,13 +17,17 @@ Lanzaboote on the ThinkPad.
 - `hosts/<name>/` — per-machine config + hardware
 - `modules/system/` — shared system modules
 - `modules/desktop/` — generic Wayland infra + Hyprland and niri
-- `modules/home/` — home-manager modules
-- `profile/` — user-level package set, installable on any Nix-enabled Linux
+- `modules/home/` — home-manager modules (CLI tools, shell, editor,
+  compositors, status bar)
+- `profile/` — portable user-level package set for **non-NixOS**
+  machines (`nix profile install .#profile`). NixOS hosts get the
+  same tools via home-manager already; `make profile` is a no-op there.
 
 Keybindings live in `modules/home/hyprland.nix` and
-`modules/home/niri.nix`; shell aliases in `modules/home/shell.nix`.
-Theme is set by `modules/system/stylix.nix` (the `base16Scheme` line),
-with manual color aliases in `modules/theme/default.nix`.
+`modules/home/niri.nix`; shell aliases in `modules/home/shell.nix`;
+waybar layout in `modules/home/waybar.nix`. Theme is set by
+`modules/system/stylix.nix` (the `base16Scheme` line); explicit color
+references in code use `config.lib.stylix.colors.base0X`.
 
 ## Daily
 
