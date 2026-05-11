@@ -1,5 +1,9 @@
 { pkgs }:
 
+# Portable user-level toolset for non-NixOS machines that have Nix
+# installed (`nix profile install .#profile`). On NixOS hosts in this
+# flake, home-manager (modules/home/cli-tools.nix) already installs
+# the same tools — running `make profile` there is redundant.
 pkgs.buildEnv {
   name = "user-profile";
   paths = with pkgs; [

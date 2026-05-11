@@ -3,6 +3,7 @@
   imports = [
     ./shell.nix
     ./git.nix
+    ./cli-tools.nix
     ./wayland-apps.nix
     ./waybar.nix
     ./hyprland.nix
