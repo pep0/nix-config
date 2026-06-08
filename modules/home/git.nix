@@ -2,12 +2,14 @@
 {
   programs.git = {
     enable = true;
-    userName = username;
-    userEmail = "baschy@msn.com";
 
-    delta = {
-      enable = true;
-      options.navigate = true;
+    settings = {
+      user.name = username;
+      user.email = "baschy@msn.com";
+
+      init.defaultBranch = "main";
+      pull.rebase = true;
+      push.autoSetupRemote = true;
     };
 
     # Sign commits with SSH using the same key that authenticates
@@ -19,12 +21,13 @@
       format = "ssh";
       key = "~/.ssh/id_ed25519.pub";
     };
+  };
 
-    extraConfig = {
-      init.defaultBranch = "main";
-      pull.rebase = true;
-      push.autoSetupRemote = true;
-    };
+  # Delta moved out of programs.git in home-manager 25.11.
+  programs.delta = {
+    enable = true;
+    enableGitIntegration = true;
+    options.navigate = true;
   };
 
   programs.lazygit.enable = true;
