@@ -39,5 +39,13 @@
     vim
     curl
     wget
+
+    # Companions to nh:
+    # - nix-output-monitor: nh auto-uses it when present (live progress
+    #   bars instead of a wall of derivation paths).
+    # - nvd: `nvd diff /run/current-system result` to see what would
+    #   actually change between system generations.
+    nix-output-monitor
+    nvd
   ];
 }

@@ -7,6 +7,18 @@
 
   programs.dconf.enable = true;
 
+  # nix-ld: dynamic loader shim so pre-built non-Nix binaries (vendor
+  # IDEs, vscode-server, some AppImages) can find their libs without
+  # being wrapped/patched.
+  programs.nix-ld.enable = true;
+
+  # GPG agent for signing commits / decrypting with gpg keys. SSH
+  # signing already works via OpenSSH; this is for GPG-only flows.
+  programs.gnupg.agent = {
+    enable = true;
+    enableSSHSupport = false;
+  };
+
   programs.thunar = {
     enable = true;
     plugins = with pkgs; [

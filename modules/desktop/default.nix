@@ -24,11 +24,28 @@
   };
 
   # XDG portals: how Wayland apps do file pickers, screen sharing, etc.
-  # Each compositor adds its own portal alongside this; gtk handles
-  # generic file dialogs.
+  # Hyprland ships its own portal (configured via `programs.hyprland.portalPackage`);
+  # niri has no native portal so we route ScreenCast/Screenshot through
+  # gnome's portal, which works under any wlroots/wayland compositor.
   xdg.portal = {
     enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+    xdgOpenUsePortal = true;
+    config = {
+      common = {
+        default = [ "gtk" ];
+        "org.freedesktop.impl.portal.ScreenCast" = [ "gnome" ];
+        "org.freedesktop.impl.portal.Screenshot" = [ "gnome" ];
+      };
+      niri = {
+        default = [ "gnome" "gtk" ];
+        "org.freedesktop.impl.portal.ScreenCast" = [ "gnome" ];
+        "org.freedesktop.impl.portal.Screenshot" = [ "gnome" ];
+      };
+    };
+    extraPortals = [
+      pkgs.xdg-desktop-portal-gtk
+      pkgs.xdg-desktop-portal-gnome
+    ];
   };
 
   # Polkit agent for GUI privilege prompts (mounting drives in a file
