@@ -17,7 +17,7 @@
     enable = true;
     settings = {
       default_session = {
-        command = "${lib.getExe pkgs.greetd.tuigreet} --time --remember --remember-session --asterisks";
+        command = "${lib.getExe pkgs.tuigreet} --time --remember --remember-session --asterisks";
         user = "greeter";
       };
     };

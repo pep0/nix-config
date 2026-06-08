@@ -2,13 +2,12 @@
   description = "NixOS system configuration + user profile";
 
   inputs = {
-    # Lanzaboote currently only supports nixos-unstable, so the system
-    # tracks unstable. If you want to peg to a release channel later,
-    # accept that you'll lose Secure Boot until lanzaboote backports.
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    # Stable channel. Lanzaboote 1.0+ supports it, package churn is
+    # smaller than unstable, and the binary cache hit rate is higher.
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
 
     home-manager = {
-      url = "github:nix-community/home-manager/master";
+      url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -29,7 +28,7 @@
     # Stylix: one base16 scheme + font set propagated everywhere
     # (system, home-manager, hyprland, terminals, GTK, Qt, ...).
     stylix = {
-      url = "github:danth/stylix";
+      url = "github:danth/stylix/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
