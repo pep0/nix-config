@@ -59,9 +59,10 @@ in
       { timeout = 300;  command = "${pkgs.hyprlock}/bin/hyprlock"; }            # 5min: lock
       { timeout = 600;  command = "${pkgs.systemd}/bin/systemctl suspend"; }    # 10min: suspend
     ];
-    events = [
-      { event = "before-sleep"; command = "${pkgs.hyprlock}/bin/hyprlock"; }
-      { event = "lock";         command = "${pkgs.hyprlock}/bin/hyprlock"; }
-    ];
+    # 26.05 changed events from list to attrset.
+    events = {
+      before-sleep = "${pkgs.hyprlock}/bin/hyprlock";
+      lock         = "${pkgs.hyprlock}/bin/hyprlock";
+    };
   };
 }

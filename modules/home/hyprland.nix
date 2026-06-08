@@ -11,6 +11,9 @@ in
   wayland.windowManager.hyprland = {
     enable = true;
     package = inputs.hyprland.packages.${pkgs.system}.hyprland;
+    # home-manager 26.05 defaults configType to "lua"; we render
+    # settings via the attrset → hyprlang path.
+    configType = "hyprlang";
 
     settings = {
       monitor = ",preferred,auto,1";
