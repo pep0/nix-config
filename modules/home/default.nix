@@ -4,6 +4,7 @@
     ./shell.nix
     ./git.nix
     ./cli-tools.nix
+    ./gtk.nix
     ./wayland-apps.nix
     ./waybar.nix
     ./hyprland.nix

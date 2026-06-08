@@ -13,7 +13,11 @@
     enable = true;
     defaultEditor = true;
   };
-  programs.yazi.enable = true;
+  programs.yazi = {
+    enable = true;
+    # 26.05 changed the default from "yy" to "y"; pin the old name.
+    shellWrapperName = "yy";
+  };
   programs.btop.enable = true;
   programs.bat.enable = true;
   programs.fastfetch.enable = true;

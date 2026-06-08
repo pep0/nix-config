@@ -20,12 +20,14 @@ in
 
       "$mod" = "SUPER";
       "$terminal" = "kitty";
+      "$browser" = "zen";
       "$menu" = "fuzzel";
+      "$filemanager" = "thunar";
 
       exec-once = [
         "waybar"
         "mako"
-        "${pkgs.lxqt.lxqt-policykit}/libexec/lxqt-policykit-agent"
+        "${pkgs.hyprpolkitagent}/libexec/hyprpolkitagent"
       ];
 
       general = {
@@ -44,23 +46,48 @@ in
       };
 
       bind = [
-        "$mod, Q, exec, $terminal"
-        "$mod, C, killactive"
-        "$mod, M, exit"
-        "$mod, R, exec, $menu"
-        "$mod, B, exec, zen"
-        "$mod CTRL, Q, exec, hyprlock"
+        # App launches
+        "$mod, return, exec, $terminal"
+        "$mod, D,      exec, $menu"
+        "$mod, B,      exec, $browser"
+        "$mod, E,      exec, $filemanager"
+        "$mod, P,      exec, powermenu"
+        "$mod, N,      exec, makoctl dismiss --all"
+        "$mod, escape, exec, hyprlock"
 
-        # Screenshot: copy / save / annotate (via the screenshot wrapper)
-        ", Print,       exec, screenshot --copy"
-        "SHIFT, Print,  exec, screenshot --save"
-        "CTRL, Print,   exec, screenshot --swappy"
+        # Window management
+        "$mod, Q,            killactive"
+        "$mod, F,            fullscreen, 1"     # maximize-ish (keeps gaps)
+        "$mod SHIFT, F,      fullscreen, 0"     # true fullscreen
+        "$mod, space,        togglefloating"
 
+        # Screenshot
+        ", Print,             exec, screenshot --copy"
+        "$mod SHIFT, S,       exec, screenshot --copy"
+        "$mod, Print,         exec, screenshot --save"
+        "$mod SHIFT, Print,   exec, screenshot --swappy"
+
+        # Focus — arrows + hjkl
         "$mod, left,  movefocus, l"
         "$mod, right, movefocus, r"
         "$mod, up,    movefocus, u"
         "$mod, down,  movefocus, d"
+        "$mod, H,     movefocus, l"
+        "$mod, J,     movefocus, d"
+        "$mod, K,     movefocus, u"
+        "$mod, L,     movefocus, r"
 
+        # Move window — arrows + hjkl
+        "$mod SHIFT, left,  movewindow, l"
+        "$mod SHIFT, right, movewindow, r"
+        "$mod SHIFT, up,    movewindow, u"
+        "$mod SHIFT, down,  movewindow, d"
+        "$mod SHIFT, H,     movewindow, l"
+        "$mod SHIFT, J,     movewindow, d"
+        "$mod SHIFT, K,     movewindow, u"
+        "$mod SHIFT, L,     movewindow, r"
+
+        # Workspaces
         "$mod, 1, workspace, 1"
         "$mod, 2, workspace, 2"
         "$mod, 3, workspace, 3"

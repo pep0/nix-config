@@ -1,7 +1,6 @@
 { pkgs, config, ... }:
 let
   c = name: "#${config.lib.stylix.colors.${name}}";
-  polkitAgent = "${pkgs.lxqt.lxqt-policykit}/libexec/lxqt-policykit-agent";
 in
 {
   # niri-flake's home-manager module is auto-propagated by the system
@@ -46,29 +45,55 @@ in
     }
 
     prefer-no-csd
+    spawn-at-startup "dbus-update-activation-environment" "--all"
     spawn-at-startup "waybar"
     spawn-at-startup "mako"
-    spawn-at-startup "${polkitAgent}"
+    spawn-at-startup "${pkgs.hyprpolkitagent}/libexec/hyprpolkitagent"
+    spawn-at-startup "wl-clip-persist" "--clipboard" "regular"
+    spawn-at-startup "poweralertd"
 
     binds {
-        // App launches — match Hyprland's bindings where it makes sense.
-        Mod+Q { spawn "kitty"; }
-        Mod+R { spawn "fuzzel"; }
-        Mod+B { spawn "zen"; }
-        Mod+C { close-window; }
-        Mod+M { quit; }
+        // App launches
+        Mod+Return { spawn "kitty"; }
+        Mod+D      { spawn "fuzzel"; }
+        Mod+B      { spawn "zen"; }
+        Mod+E      { spawn "thunar"; }
+        Mod+P      { spawn "powermenu"; }
+        Mod+N      { spawn "makoctl" "dismiss" "--all"; }
+        Mod+Escape { spawn "hyprlock"; }
 
-        // Focus
+        // Window management
+        Mod+Q       { close-window; }
+        Mod+F       { maximize-column; }
+        Mod+Shift+F { fullscreen-window; }
+        Mod+Space   { toggle-window-floating; }
+        Mod+W       { switch-preset-column-width; }
+
+        // Screenshot
+        Print              { spawn "screenshot" "--copy"; }
+        Mod+Shift+S        { spawn "screenshot" "--copy"; }
+        Mod+Print          { spawn "screenshot" "--save"; }
+        Mod+Shift+Print    { spawn "screenshot" "--swappy"; }
+
+        // Focus — arrows + hjkl
         Mod+Left  { focus-column-left; }
         Mod+Right { focus-column-right; }
         Mod+Up    { focus-window-up; }
         Mod+Down  { focus-window-down; }
+        Mod+H     { focus-column-left; }
+        Mod+J     { focus-window-or-workspace-down; }
+        Mod+K     { focus-window-or-workspace-up; }
+        Mod+L     { focus-column-right; }
 
-        // Move windows
+        // Move column / window — arrows + hjkl
         Mod+Shift+Left  { move-column-left; }
         Mod+Shift+Right { move-column-right; }
         Mod+Shift+Up    { move-window-up; }
         Mod+Shift+Down  { move-window-down; }
+        Mod+Shift+H     { move-column-left; }
+        Mod+Shift+J     { move-window-down; }
+        Mod+Shift+K     { move-window-up; }
+        Mod+Shift+L     { move-column-right; }
 
         // Workspaces
         Mod+1 { focus-workspace 1; }
@@ -79,19 +104,6 @@ in
         Mod+Shift+2 { move-column-to-workspace 2; }
         Mod+Shift+3 { move-column-to-workspace 3; }
         Mod+Shift+4 { move-column-to-workspace 4; }
-
-        // Column-width niri specifics — no Hyprland equivalent
-        Mod+W { switch-preset-column-width; }
-        Mod+F { maximize-column; }
-        Mod+Shift+F { fullscreen-window; }
-
-        // Lock
-        Mod+Ctrl+Q { spawn "hyprlock"; }
-
-        // Screenshot: copy / save / annotate
-        Print          { spawn "screenshot" "--copy"; }
-        Shift+Print    { spawn "screenshot" "--save"; }
-        Ctrl+Print     { spawn "screenshot" "--swappy"; }
 
         // Media + brightness keys
         XF86AudioRaiseVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "5%+"; }
