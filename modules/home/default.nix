@@ -10,6 +10,8 @@
     ./hyprland.nix
     ./niri.nix
     ./browser.nix
+    ./apps.nix
+    ./tidal.nix
   ];
 
   home.username = username;
