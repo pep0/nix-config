@@ -5,9 +5,8 @@ let
   c = name: "rgb(${config.lib.stylix.colors.${name}})";
 in
 {
-  # Hyprland-only extras. Shared apps (kitty, waybar, mako, swayidle …)
-  # live in modules/home/wayland-apps.nix.
-  home.packages = with pkgs; [ wofi ];
+  # Hyprland-only extras. Shared apps (kitty, waybar, mako, fuzzel,
+  # hyprlock, swayidle …) live in modules/home/wayland-apps.nix.
 
   wayland.windowManager.hyprland = {
     enable = true;
@@ -18,7 +17,7 @@ in
 
       "$mod" = "SUPER";
       "$terminal" = "kitty";
-      "$menu" = "wofi --show drun";
+      "$menu" = "fuzzel";
 
       exec-once = [
         "waybar"
@@ -47,8 +46,12 @@ in
         "$mod, M, exit"
         "$mod, R, exec, $menu"
         "$mod, B, exec, zen"
-        "$mod CTRL, Q, exec, swaylock"
-        ", Print, exec, grim -g \"$(slurp)\" - | wl-copy"
+        "$mod CTRL, Q, exec, hyprlock"
+
+        # Screenshot: copy / save / annotate (via the screenshot wrapper)
+        ", Print,       exec, screenshot --copy"
+        "SHIFT, Print,  exec, screenshot --save"
+        "CTRL, Print,   exec, screenshot --swappy"
 
         "$mod, left,  movefocus, l"
         "$mod, right, movefocus, r"

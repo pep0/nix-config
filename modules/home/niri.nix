@@ -8,8 +8,6 @@ in
   # module (modules/desktop/niri.nix). Shared apps live in
   # modules/home/wayland-apps.nix; this file is niri-only.
 
-  home.packages = with pkgs; [ wofi ];
-
   programs.niri.config = ''
     // See https://github.com/YaLTeR/niri/wiki/Configuration%3A-Overview
     // Stylix's niri target merges colors/fonts on top of this file.
@@ -55,7 +53,7 @@ in
     binds {
         // App launches — match Hyprland's bindings where it makes sense.
         Mod+Q { spawn "kitty"; }
-        Mod+R { spawn "wofi" "--show" "drun"; }
+        Mod+R { spawn "fuzzel"; }
         Mod+B { spawn "zen"; }
         Mod+C { close-window; }
         Mod+M { quit; }
@@ -87,9 +85,13 @@ in
         Mod+F { maximize-column; }
         Mod+Shift+F { fullscreen-window; }
 
-        // Screenshot + lock
-        Print { screenshot; }
-        Mod+Ctrl+Q { spawn "swaylock"; }
+        // Lock
+        Mod+Ctrl+Q { spawn "hyprlock"; }
+
+        // Screenshot: copy / save / annotate
+        Print          { spawn "screenshot" "--copy"; }
+        Shift+Print    { spawn "screenshot" "--save"; }
+        Ctrl+Print     { spawn "screenshot" "--swappy"; }
 
         // Media + brightness keys
         XF86AudioRaiseVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "5%+"; }
