@@ -20,7 +20,7 @@ in
 
       "$mod" = "SUPER";
       "$terminal" = "kitty";
-      "$browser" = "zen";
+      "$browser" = "firefox";
       "$menu" = "fuzzel";
       "$filemanager" = "thunar";
 

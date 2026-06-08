@@ -56,7 +56,7 @@ in
         // App launches
         Mod+Return { spawn "kitty"; }
         Mod+D      { spawn "fuzzel"; }
-        Mod+B      { spawn "zen"; }
+        Mod+B      { spawn "firefox"; }
         Mod+E      { spawn "thunar"; }
         Mod+P      { spawn "powermenu"; }
         Mod+N      { spawn "makoctl" "dismiss" "--all"; }
