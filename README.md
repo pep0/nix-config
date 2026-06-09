@@ -51,6 +51,7 @@ make clean      # GC old generations
 
 - Install or migrate: [INSTALL.md](INSTALL.md)
 - Secure Boot bootstrap: [SECUREBOOT.md](SECUREBOOT.md)
+- TPM2 auto-unlock for LUKS (after Secure Boot): [TPM-UNLOCK.md](TPM-UNLOCK.md)
 - Secrets bootstrap: [SECRETS.md](SECRETS.md)
 
 ## Notes

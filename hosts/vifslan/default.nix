@@ -25,6 +25,7 @@
     ../../modules/system/programs.nix
     ../../modules/system/services.nix
     ../../modules/system/tailscale.nix
+    ../../modules/system/tpm-unlock.nix
     ../../modules/desktop                 # generic Wayland infrastructure
     ../../modules/desktop/hyprland.nix
     ../../modules/desktop/niri.nix
