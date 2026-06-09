@@ -24,14 +24,14 @@
   # Until you've enrolled keys, keep this off. Flipping it before
   # enrolment will leave you with an unbootable system.
   boot.lanzaboote = {
-    enable = false;
-    # enable = true;
-    # pkiBundle = "/var/lib/sbctl";
+    # enable = false;
+    enable = true;
+    pkiBundle = "/var/lib/sbctl";
   };
 
   # When lanzaboote is on, it owns the bootloader — disable systemd-boot
   # so the modules don't fight. The mkForce overrides boot.nix's default.
   # Uncomment this block at the same time you flip enable above.
   #
-  # boot.loader.systemd-boot.enable = lib.mkForce false;
+  boot.loader.systemd-boot.enable = lib.mkForce false;
 }
