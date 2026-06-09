@@ -31,7 +31,7 @@
     ../../modules/desktop/niri.nix
   ];
 
-  networking.hostName = "vifslan";
+  networking.hostName = "thinkpad";
   system.stateVersion = stateVersion;
 
   # ---------------------------------------------------------------

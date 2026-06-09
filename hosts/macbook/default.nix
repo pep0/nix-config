@@ -32,7 +32,7 @@
     ../../modules/desktop/niri.nix
   ];
 
-  networking.hostName = "tofslan";
+  networking.hostName = "macbook";
   system.stateVersion = stateVersion;
 
   # ---------------------------------------------------------------

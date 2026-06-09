@@ -1,10 +1,10 @@
-# ThinkPad NixOS install — vifslan
+# ThinkPad NixOS install
 
 Self-contained walkthrough. Save this to your phone before you boot
 the installer; it's the only reference you'll need from "wipe Ubuntu"
 through "TPM auto-unlock working".
 
-Hostname is `vifslan`. Linux user is `pep0`. Disk is `/dev/nvme0n1`
+Hostname is `thinkpad`. Linux user is `pep0`. Disk is `/dev/nvme0n1`
 (the P14s Gen 5 only has the M.2 NVMe slot — confirm with `lsblk -d`
 if unsure).
 
@@ -177,7 +177,7 @@ at boot. Add it manually before continuing — the UUID is what
 
 ```
 nix-shell -p git --run 'git clone https://github.com/pep0/nix-config /mnt/etc/nixos/nix-config'
-sudo cp /mnt/etc/nixos/hardware-configuration.nix /mnt/etc/nixos/nix-config/hosts/vifslan/
+sudo cp /mnt/etc/nixos/hardware-configuration.nix /mnt/etc/nixos/nix-config/hosts/thinkpad/
 ```
 
 ---
@@ -185,7 +185,7 @@ sudo cp /mnt/etc/nixos/hardware-configuration.nix /mnt/etc/nixos/nix-config/host
 ## 7. Install
 
 ```
-sudo nixos-install --flake /mnt/etc/nixos/nix-config#vifslan
+sudo nixos-install --flake /mnt/etc/nixos/nix-config#thinkpad
 ```
 
 This will:
@@ -325,7 +325,7 @@ Every relevant binary should show `signed`.
 If something breaks during 10c–10f, boot the NixOS installer USB,
 mount your disks (`cryptsetup open /dev/nvme0n1p2 cryptroot; mount
 /dev/disk/by-label/nixos /mnt`), edit `secureboot.nix` to flip
-enable back off, and `nixos-install --flake /mnt/etc/nixos/nix-config#vifslan`
+enable back off, and `nixos-install --flake /mnt/etc/nixos/nix-config#thinkpad`
 again. You can also boot via the BIOS boot menu picking the
 systemd-boot entry if it's still on the ESP.
 
@@ -348,7 +348,7 @@ P14s Gen 5.
 
 ### 11b. Confirm the module is active
 
-Already wired in `hosts/vifslan/default.nix` (imports
+Already wired in `hosts/thinkpad/default.nix` (imports
 `modules/system/tpm-unlock.nix`). After step 7 the initrd already
 has systemd + TPM support, so the first reboot in this section will
 just confirm fallback works:
@@ -443,7 +443,7 @@ Persistent failures are usually missing inputs in
 
 **LUKS passphrase prompt doesn't appear at boot**
 Boot the installer USB, mount the disks, check
-`/mnt/etc/nixos/nix-config/hosts/vifslan/hardware-configuration.nix`
+`/mnt/etc/nixos/nix-config/hosts/thinkpad/hardware-configuration.nix`
 has `boot.initrd.luks.devices."cryptroot".device = ...`. Re-run
 `nixos-install` if you fix it.
 

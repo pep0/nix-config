@@ -88,10 +88,8 @@
       # explicitly.
       # ---------------------------------------------------------------
       nixosConfigurations = {
-        # Moomin twins: Vifslan (the larger one) is the ThinkPad,
-        # Tofslan (the smaller, older one) is the MacBook.
-        vifslan = mkSystem ./hosts/vifslan;   # ThinkPad P14s Gen 5 (Intel)
-        tofslan = mkSystem ./hosts/tofslan;   # MacBook Pro Mid 2014, 13" (MacBookPro11,1)
+        thinkpad = mkSystem ./hosts/thinkpad;   # ThinkPad P14s Gen 5 (Intel)
+        macbook  = mkSystem ./hosts/macbook;    # MacBook Pro Mid 2014, 13" (MacBookPro11,1)
       };
 
       # ---------------------------------------------------------------

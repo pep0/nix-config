@@ -3,10 +3,10 @@
 Personal [NixOS](https://nixos.org/) flake for two machines. Tracks
 `nixos-26.05` stable.
 
-| Host      | Target                                      |
-| :-------- | :------------------------------------------ |
-| `vifslan` | ThinkPad P14s Gen 5 (Intel)                 |
-| `tofslan` | MacBook Pro Mid 2014, 13" (MacBookPro11,1)  |
+| Host       | Target                                      |
+| :--------- | :------------------------------------------ |
+| `thinkpad` | ThinkPad P14s Gen 5 (Intel)                 |
+| `macbook`  | MacBook Pro Mid 2014, 13" (MacBookPro11,1)  |
 
 Hyprland and niri coexist as login sessions (picked at greetd), themed
 Tokyo Night via Stylix. Firefox as the browser, hyprlock + swayidle
@@ -57,14 +57,14 @@ make clean      # GC old generations
 ## Notes
 
 - `modules/system/boot.nix` uses `pkgs.linuxPackages_latest` as a
-  `mkDefault`; `tofslan` overrides this to `pkgs.linuxPackages`
+  `mkDefault`; `macbook` overrides this to `pkgs.linuxPackages`
   because `broadcom-sta` lags behind bleeding-edge kernels. If a
-  rebuild on `vifslan` fails on the NVIDIA kernel module after a
+  rebuild on `thinkpad` fails on the NVIDIA kernel module after a
   kernel bump, do the same: pin to `linuxPackages` until the driver
   catches up.
 - `modules/home/tidal.nix` pulls in GHC + SuperCollider (~1–2GB
   closure) for [TidalCycles](https://tidalcycles.org/) live-coding.
   Drop the import from `modules/home/default.nix` if you don't use it.
-- `make profile` is a no-op on `vifslan` / `tofslan` — those tools
+- `make profile` is a no-op on `thinkpad` / `macbook` — those tools
   already ship via home-manager. The `profile/` output is for using
   this flake on non-NixOS Linux machines (`nix profile install .#profile`).

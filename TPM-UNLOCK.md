@@ -11,7 +11,7 @@ via PCR 7 — which encodes "Secure Boot is on with these specific
 keys". Without SB enrolled, PCR 7 is meaningless and the protection
 is theatre.
 
-Applies to `vifslan` only (the ThinkPad). `tofslan` (MacBook Pro Mid
+Applies to `thinkpad` only (the ThinkPad). `macbook` (MacBook Pro Mid
 2014) has no usable TPM2 chip.
 
 ## Why PCR 7
@@ -45,7 +45,7 @@ or kernel update. Not worth it for a personal laptop.
   ls /dev/tpm*           # /dev/tpm0 and /dev/tpmrm0 should exist
   ```
 - This flake's `modules/system/tpm-unlock.nix` is imported by the
-  host (already wired into `hosts/vifslan/default.nix`).
+  host (already wired into `hosts/thinkpad/default.nix`).
 
 ## Steps
 
@@ -101,7 +101,7 @@ sudo systemd-cryptenroll --tpm2-device=auto --tpm2-pcrs=7 /dev/nvme0n1p2
 ```
 sudo systemd-cryptenroll --wipe-slot=tpm2 /dev/nvme0n1p2
 ```
-Then optionally drop the module import from `hosts/vifslan/default.nix`
+Then optionally drop the module import from `hosts/thinkpad/default.nix`
 and remove `modules/system/tpm-unlock.nix`.
 
 ### Locking out the passphrase (don't)
