@@ -85,6 +85,12 @@ in
         Mod+K     { focus-window-or-workspace-up; }
         Mod+L     { focus-column-right; }
 
+        // Focus Monitor
+        Mod+Comma  { focus-monitor-left; }
+        Mod+Period { focus-monitor-right; }
+        Mod+Shift+Comma  { move-column-to-monitor-left; }
+        Mod+Shift+Period { move-column-to-monitor-right; }
+
         // Move column / window — arrows + hjkl
         Mod+Shift+Left  { move-column-left; }
         Mod+Shift+Right { move-column-right; }
@@ -115,6 +121,19 @@ in
         XF86AudioPlay { spawn "playerctl" "play-pause"; }
         XF86AudioNext { spawn "playerctl" "next"; }
         XF86AudioPrev { spawn "playerctl" "previous"; }
+    }
+    output "eDP-1" {
+        off
+    }
+    output "Dell Inc. DELL U2421E 7K69DP3" {
+    mode "1920x1200@59.950"
+    scale 1.0
+    position x=0 y=0
+    }
+    output "Dell Inc. DELL U2421E 9K69DP3" {
+        mode "1920x1200@59.950"
+        scale 1.0
+        position x=1920 y=0
     }
   '';
 }
