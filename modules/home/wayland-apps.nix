@@ -46,6 +46,11 @@ let
   '';
 in
 {
+  # Suppress tray applets that autostart via XDG — bluetooth/network are
+  # handled by the waybar modules, so the applet icons would be duplicates.
+  xdg.configFile."autostart/blueman.desktop".text = "[Desktop Entry]\nHidden=true\n";
+  xdg.configFile."autostart/nm-applet.desktop".text = "[Desktop Entry]\nHidden=true\n";
+
   # Wayland apps: tools spawned by niri binds and hardware-control utilities.
 
   home.packages = with pkgs; [

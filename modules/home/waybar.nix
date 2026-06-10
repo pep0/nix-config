@@ -25,11 +25,16 @@
         "pulseaudio"
         "backlight"
         "battery"
+        "niri/language"
         "clock"
       ];
 
       "niri/workspaces" = {
         format = "{index}";
+      };
+
+      "niri/language" = {
+        format = "󰌌 {short}";
       };
 
       "niri/window" = {
@@ -53,48 +58,48 @@
           warning = 30;
           critical = 15;
         };
-        format = "{capacity}% {icon}";
-        format-charging = "{capacity}% ";
-        format-plugged = "{capacity}% ";
-        format-alt = "{time} {icon}";
-        format-icons = [ "" "" "" "" "" ];
+        format = "{icon} {capacity}%";
+        format-charging = "󰂄 {capacity}%";
+        format-plugged = "󰚥 {capacity}%";
+        format-alt = "{icon} {time}";
+        format-icons = [ "󰁺" "󰁻" "󰁼" "󰁽" "󰁾" "󰁿" "󰂀" "󰂁" "󰂂" "󰁹" ];
       };
 
       backlight = {
-        format = "{percent}% {icon}";
-        format-icons = [ "" "" "" "" "" "" "" "" "" ];
+        format = "󰃟 {percent}%";
         on-scroll-up = "${pkgs.brightnessctl}/bin/brightnessctl set 5%+";
         on-scroll-down = "${pkgs.brightnessctl}/bin/brightnessctl set 5%-";
       };
 
       network = {
-        format-wifi = "{essid} ({signalStrength}%) ";
-        format-ethernet = "{ifname} ";
-        format-disconnected = "disconnected ⚠";
-        tooltip-format = "{ifname} via {gwaddr}";
+        format-wifi = "󰤨 {signalStrength}%";
+        format-ethernet = "󰈀 {ifname}";
+        format-disconnected = "󰤭 offline";
+        tooltip-format-wifi = "{essid} ({signalStrength}%) via {gwaddr}";
+        tooltip-format-ethernet = "{ifname} via {gwaddr}";
         on-click = "${pkgs.networkmanagerapplet}/bin/nm-connection-editor";
       };
 
       bluetooth = {
-        format = "";
-        format-disabled = "";
-        format-off = "";
-        format-connected = " {num_connections}";
-        tooltip-format = "{controller_alias}\t{controller_address}";
+        format = "󰂲";
+        format-disabled = "󰂲";
+        format-off = "󰂲";
+        format-connected = "󰂯 {num_connections}";
+        tooltip-format = "{controller_alias}  {controller_address}";
         tooltip-format-connected = "{device_enumerate}";
-        tooltip-format-enumerate-connected = "{device_alias}\t{device_address}";
+        tooltip-format-enumerate-connected = "{device_alias}  {device_address}";
         on-click = "${pkgs.blueman}/bin/blueman-manager";
       };
 
       pulseaudio = {
-        format = "{volume}% {icon}";
-        format-bluetooth = "{volume}% {icon} ";
-        format-muted = "";
+        format = "{icon} {volume}%";
+        format-bluetooth = "󰂯 {icon} {volume}%";
+        format-muted = "󰖁";
         format-icons = {
-          headphone = "";
-          hands-free = "";
-          headset = "";
-          default = [ "" "" "" ];
+          headphone = "󰋋";
+          hands-free = "󰋎";
+          headset = "󰋎";
+          default = [ "󰕿" "󰖀" "󰕾" ];
         };
         on-click = "${pkgs.pavucontrol}/bin/pavucontrol";
         on-click-right = "${pkgs.pamixer}/bin/pamixer -t";
