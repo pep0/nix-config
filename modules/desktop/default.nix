@@ -24,7 +24,6 @@
   };
 
   # XDG portals: how Wayland apps do file pickers, screen sharing, etc.
-  # Hyprland ships its own portal (configured via `programs.hyprland.portalPackage`);
   # niri has no native portal so we route ScreenCast/Screenshot through
   # gnome's portal, which works under any wlroots/wayland compositor.
   xdg.portal = {

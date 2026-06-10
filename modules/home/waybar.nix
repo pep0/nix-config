@@ -1,8 +1,7 @@
 { pkgs, ... }:
 {
   # Waybar layout. Stylix's `targets.waybar` paints the colors; this
-  # module owns layout + modules. Both Hyprland and niri workspace
-  # modules are listed — waybar auto-shows the one whose IPC is live.
+  # module owns layout + modules.
 
   programs.waybar.settings = {
     mainBar = {
@@ -12,12 +11,10 @@
       spacing = 4;
 
       modules-left = [
-        "hyprland/workspaces"
         "niri/workspaces"
       ];
 
       modules-center = [
-        "hyprland/window"
         "niri/window"
       ];
 
@@ -31,28 +28,8 @@
         "clock"
       ];
 
-      "hyprland/workspaces" = {
-        format = "{icon}";
-        format-icons = {
-          "1" = "1";
-          "2" = "2";
-          "3" = "3";
-          "4" = "4";
-          active = "●";
-          default = "○";
-          urgent = "!";
-        };
-        on-click = "activate";
-      };
-
       "niri/workspaces" = {
         format = "{index}";
-      };
-
-      "hyprland/window" = {
-        format = "{title}";
-        max-length = 60;
-        separate-outputs = true;
       };
 
       "niri/window" = {

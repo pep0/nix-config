@@ -15,10 +15,6 @@
     # are imported from the relevant hosts/<name>/default.nix file.
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
-    # Use the flake's Hyprland — the devs explicitly recommend this over
-    # the nixpkgs version when bug-hunting.
-    hyprland.url = "github:hyprwm/Hyprland";
-
     # Lanzaboote: Secure Boot for NixOS. Pin to a release tag.
     lanzaboote = {
       url = "github:nix-community/lanzaboote/v1.0.0";
@@ -26,7 +22,7 @@
     };
 
     # Stylix: one base16 scheme + font set propagated everywhere
-    # (system, home-manager, hyprland, terminals, GTK, Qt, ...).
+    # (system, home-manager, terminals, GTK, Qt, ...).
     stylix = {
       url = "github:danth/stylix/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -38,15 +34,14 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # niri-flake: scrollable-tiling Wayland compositor. Coexists with
-    # Hyprland — both are listed at the greetd login picker.
+    # niri-flake: scrollable-tiling Wayland compositor.
     niri = {
       url = "github:sodiboo/niri-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, nixos-hardware, hyprland, lanzaboote, stylix, sops-nix, niri, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, nixos-hardware, lanzaboote, stylix, sops-nix, niri, ... }@inputs:
     let
       system = "x86_64-linux";
 

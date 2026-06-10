@@ -7,7 +7,6 @@
     ./gtk.nix
     ./wayland-apps.nix
     ./waybar.nix
-    ./hyprland.nix
     ./niri.nix
     ./browser.nix
     ./apps.nix

@@ -9,7 +9,7 @@
 
   # auditd records security-relevant events; useful for debugging
   # AppArmor denials.
-  security.auditd.enable = true;
+  # security.auditd.enable = true;
 
   # Firmware updates from LVFS (ThinkPad/most modern hardware ships
   # firmware here). MacBook gets little benefit but it's harmless.

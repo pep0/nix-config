@@ -38,7 +38,7 @@ let
 
     case "$choice" in
       *Lock)     ${pkgs.hyprlock}/bin/hyprlock ;;
-      *Logout)   if pgrep -x Hyprland >/dev/null; then hyprctl dispatch exit; else niri msg action quit; fi ;;
+      *Logout)   niri msg action quit ;;
       *Suspend)  systemctl suspend ;;
       *Reboot)   systemctl reboot ;;
       *Shutdown) systemctl poweroff ;;
@@ -46,9 +46,7 @@ let
   '';
 in
 {
-  # Shared between Hyprland and niri: apps that compositor binds spawn
-  # plus hardware-control utilities. Each compositor module adds its
-  # own extras on top.
+  # Wayland apps: tools spawned by niri binds and hardware-control utilities.
 
   home.packages = with pkgs; [
     screenshot

@@ -43,10 +43,12 @@
         showCommandLog = false;
       };
       git = {
-        paging = {
-          colorArg = "always";
-          pager = "delta --dark --paging=never --side-by-side";
-        };
+        pagers = [
+          {
+            colorArg = "always";
+            pager = "delta --dark --paging=never --side-by-side";
+          }
+        ];
         parseEmoji = true;
         log = {
           showGraph = "always";
