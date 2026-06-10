@@ -12,6 +12,42 @@
   programs.helix = {
     enable = true;
     defaultEditor = true;
+    settings = {
+      editor = {
+        bufferline = "multiple";
+        cursorline = true;
+        line-number = "relative";
+        true-color = false;
+        trim-trailing-whitespace = true;
+        statusline.left = [ "mode" "spinner" "version-control" "file-name" ];
+        file-picker.hidden = false;
+        lsp = {
+          display-messages = true;
+          display-inlay-hints = true;
+          auto-signature-help = true;
+        };
+        cursor-shape = {
+          insert = "bar";
+          normal = "block";
+          select = "underline";
+        };
+      };
+      keys = {
+        normal = {
+          "A-x" = "extend_to_line_bounds";
+          X = [ "extend_line_up" "extend_to_line_bounds" ];
+          H = "goto_previous_buffer";
+          L = "goto_next_buffer";
+          "A-w" = ":buffer-close";
+          "A-/" = "repeat_last_motion";
+        };
+        insert.j.k = "normal_mode";
+        select = {
+          "A-x" = "extend_to_line_bounds";
+          X = [ "extend_line_up" "extend_to_line_bounds" ];
+        };
+      };
+    };
   };
   programs.yazi = {
     enable = true;
@@ -30,16 +66,14 @@
     ncdu
     nvtopPackages.full
 
+    # build / archive
+    gnumake
+    zip
+    unzip
+
     # nix dev
     nixpkgs-fmt
     nil                    # nix LSP
-
-    # rust toolchain (stable nixpkgs versions)
-    rustc
-    cargo
-    rust-analyzer
-    rustfmt
-    clippy
 
     # ai / dev shells
     claude-code
