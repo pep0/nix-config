@@ -30,5 +30,29 @@
     options.navigate = true;
   };
 
-  programs.lazygit.enable = true;
+  programs.lazygit = {
+    enable = true;
+    settings = {
+      os = {
+        edit = "hx -- {{filename}}";
+        editAtLine = "hx -- {{filename}}:{{line}}";
+      };
+      gui = {
+        showFileTree = true;
+        showRandomTip = false;
+        showCommandLog = false;
+      };
+      git = {
+        paging = {
+          colorArg = "always";
+          pager = "delta --dark --paging=never --side-by-side";
+        };
+        parseEmoji = true;
+        log = {
+          showGraph = "always";
+          showWholeGraph = true;
+        };
+      };
+    };
+  };
 }
