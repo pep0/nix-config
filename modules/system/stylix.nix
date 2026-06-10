@@ -14,7 +14,9 @@
     # base16-schemes ships hundreds of YAML schemes — swap the filename
     # to e.g. `catppuccin-mocha.yaml`, `gruvbox-dark-medium.yaml`, or
     # `tokyo-night-storm.yaml` to change the entire system theme.
-    base16Scheme = "${pkgs.base16-schemes}/share/themes/tokyo-night-dark.yaml";
+    # base16Scheme = "${pkgs.base16-schemes}/share/themes/tokyo-night-dark.yaml";
+    # base16Scheme = "${pkgs.base16-schemes}/share/themes/qualia.yaml";
+    base16Scheme = "${pkgs.base16-schemes}/share/themes/dracula.yaml";
 
     # Stylix requires an `image` (used as desktop wallpaper). With a
     # base16Scheme set, the image isn't used to derive colors. The

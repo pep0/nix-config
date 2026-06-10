@@ -10,6 +10,12 @@
       init.defaultBranch = "main";
       pull.rebase = true;
       push.autoSetupRemote = true;
+
+      url = {
+        "https://".insteadOf = "git://";
+        "git@github.com:".insteadOf = "https://github.com/";
+        "ssh://git@gitlab.spacetek.ch/".insteadOf = "https://gitlab.spacetek.ch/";
+      };
     };
 
     # Sign commits with SSH using the same key that authenticates
