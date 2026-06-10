@@ -14,7 +14,9 @@ in
     input {
         keyboard {
             xkb {
-                layout "us"
+                layout "us,ch"
+                variant ",de_nodeadkeys"
+                options "grp:win_space_toggle"
             }
         }
         touchpad {
@@ -66,7 +68,7 @@ in
         Mod+Q       { close-window; }
         Mod+F       { maximize-column; }
         Mod+Shift+F { fullscreen-window; }
-        Mod+Space   { toggle-window-floating; }
+        Mod+Shift+Space { toggle-window-floating; }
         Mod+W       { switch-preset-column-width; }
 
         // Screenshot
