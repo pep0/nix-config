@@ -75,31 +75,25 @@ in
         Mod+Print          { spawn "screenshot" "--save"; }
         Mod+Shift+Print    { spawn "screenshot" "--swappy"; }
 
-        // Focus — arrows + hjkl
-        Mod+Left  { focus-column-left; }
-        Mod+Right { focus-column-right; }
+        // Focus — arrows + hjkl; spills over to adjacent monitor at the edge
+        Mod+Left  { focus-column-or-monitor-left; }
+        Mod+Right { focus-column-or-monitor-right; }
         Mod+Up    { focus-window-up; }
         Mod+Down  { focus-window-down; }
-        Mod+H     { focus-column-left; }
+        Mod+H     { focus-column-or-monitor-left; }
         Mod+J     { focus-window-or-workspace-down; }
         Mod+K     { focus-window-or-workspace-up; }
-        Mod+L     { focus-column-right; }
+        Mod+L     { focus-column-or-monitor-right; }
 
-        // Focus Monitor
-        Mod+Comma  { focus-monitor-left; }
-        Mod+Period { focus-monitor-right; }
-        Mod+Shift+Comma  { move-column-to-monitor-left; }
-        Mod+Shift+Period { move-column-to-monitor-right; }
-
-        // Move column / window — arrows + hjkl
-        Mod+Shift+Left  { move-column-left; }
-        Mod+Shift+Right { move-column-right; }
+        // Move column / window — arrows + hjkl; spills over to adjacent monitor at the edge
+        Mod+Shift+Left  { move-column-left-or-to-monitor-left; }
+        Mod+Shift+Right { move-column-right-or-to-monitor-right; }
         Mod+Shift+Up    { move-window-up; }
         Mod+Shift+Down  { move-window-down; }
-        Mod+Shift+H     { move-column-left; }
+        Mod+Shift+H     { move-column-left-or-to-monitor-left; }
         Mod+Shift+J     { move-window-down; }
         Mod+Shift+K     { move-window-up; }
-        Mod+Shift+L     { move-column-right; }
+        Mod+Shift+L     { move-column-right-or-to-monitor-right; }
 
         // Workspaces
         Mod+1 { focus-workspace 1; }
