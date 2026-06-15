@@ -1,63 +1,56 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
+let
+  c = name: "#${config.lib.stylix.colors.${name}}";
+in
 {
-  # Waybar layout. Stylix's `targets.waybar` paints the colors; this
-  # module owns layout + modules.
-
-  programs.waybar.settings = {
-    mainBar = {
+  programs.waybar = {
+    settings.mainBar = {
       layer = "top";
       position = "top";
       height = 32;
       spacing = 4;
 
-      modules-left = [
-        "niri/workspaces"
-      ];
-
-      modules-center = [
-        "niri/window"
-      ];
-
+      modules-left = [ "niri/workspaces" ];
+      modules-center = [ "clock" ];
       modules-right = [
         "tray"
-        "bluetooth"
-        "network"
+        "cpu"
+        "memory"
         "pulseaudio"
         "backlight"
+        "network"
+        "bluetooth"
         "battery"
         "niri/language"
-        "clock"
       ];
 
-      "niri/workspaces" = {
-        format = "{index}";
-      };
+      "niri/workspaces".format = "{index}";
 
-      "niri/language" = {
-        format = "󰌌 {short}";
-      };
+      "niri/language".format = "󰌌 {short}";
 
-      "niri/window" = {
-        format = "{title}";
-        max-length = 60;
-      };
-
-      tray = {
-        icon-size = 16;
-        spacing = 8;
-      };
+      tray = { icon-size = 16; spacing = 8; };
 
       clock = {
-        format = "{:%H:%M  %a %d}";
-        format-alt = "{:%Y-%m-%d %H:%M:%S}";
+        format = "{:%H:%M}";
+        format-alt = "{:%d/%m/%Y}";
+        tooltip = true;
         tooltip-format = "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>";
       };
 
+      cpu = {
+        format = "󰻠 {usage}%";
+        tooltip = false;
+        on-click = "kitty -e btop";
+      };
+
+      memory = {
+        format = "󰍛 {used:0.1f}G";
+        tooltip-format = "{used:0.1f}G / {total:0.1f}G";
+        on-click = "kitty -e btop";
+      };
+
       battery = {
-        states = {
-          warning = 30;
-          critical = 15;
-        };
+        states = { warning = 30; critical = 15; };
         format = "{icon} {capacity}%";
         format-charging = "󰂄 {capacity}%";
         format-plugged = "󰚥 {capacity}%";
@@ -82,9 +75,9 @@
 
       bluetooth = {
         format = "󰂲";
+        format-connected = "󰂯 {num_connections}";
         format-disabled = "󰂲";
         format-off = "󰂲";
-        format-connected = "󰂯 {num_connections}";
         tooltip-format = "{controller_alias}  {controller_address}";
         tooltip-format-connected = "{device_enumerate}";
         tooltip-format-enumerate-connected = "{device_alias}  {device_address}";
@@ -93,7 +86,7 @@
 
       pulseaudio = {
         format = "{icon} {volume}%";
-        format-bluetooth = "󰂯 {icon} {volume}%";
+        format-bluetooth = "{icon} {volume}%";
         format-muted = "󰖁";
         format-icons = {
           headphone = "󰋋";
@@ -106,5 +99,54 @@
         scroll-step = 5;
       };
     };
+
+    style = ''
+      window#waybar, window#waybar * {
+        font-family: "JetBrainsMono Nerd Font";
+        font-size: 10pt;
+      }
+
+      /* Spacing between right-side modules */
+      #cpu, #memory, #pulseaudio, #backlight,
+      #network, #bluetooth, #battery, #language, #clock, #tray {
+        margin: 0 6px;
+      }
+
+      /* Override stylix's border-bottom on workspace buttons */
+      .modules-left #workspaces button,
+      .modules-left #workspaces button.focused,
+      .modules-left #workspaces button.active {
+        border-bottom: none;
+      }
+
+      #workspaces button {
+        color: ${c "base03"};
+        background: transparent;
+        padding: 0 8px;
+        border: none;
+        min-width: 24px;
+      }
+
+      #workspaces button.active {
+        color: ${c "base0A"};
+      }
+
+      #workspaces button.urgent {
+        color: ${c "base08"};
+      }
+
+      #workspaces button:hover {
+        color: ${c "base05"};
+        background: ${c "base01"};
+      }
+
+      #battery.warning {
+        color: ${c "base09"};
+      }
+
+      #battery.critical {
+        color: ${c "base08"};
+      }
+    '';
   };
 }

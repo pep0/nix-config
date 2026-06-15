@@ -18,11 +18,10 @@
     # base16Scheme = "${pkgs.base16-schemes}/share/themes/qualia.yaml";
     base16Scheme = "${pkgs.base16-schemes}/share/themes/dracula.yaml";
 
-    # Stylix requires an `image` (used as desktop wallpaper). With a
-    # base16Scheme set, the image isn't used to derive colors. The
-    # `pixel` helper returns a 1×1 PNG of the named base16 color —
-    # cheap placeholder until you drop a real wallpaper here.
-    image = config.lib.stylix.pixel "base00";
+    image = pkgs.fetchurl {
+      url = "https://static.simpledesktops.com/uploads/desktops/2017/02/07/traffic.png";
+      hash = "sha256-ThvTekcP2fUBEwa5GfpFE7jUwxBF+Gl0St7EUGnVtsQ=";
+    };
 
     fonts = {
       monospace = {

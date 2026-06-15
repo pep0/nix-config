@@ -48,6 +48,7 @@ in
 
     prefer-no-csd
     spawn-at-startup "dbus-update-activation-environment" "--all"
+    spawn-at-startup "swaybg" "-m" "fill" "-i" "${config.stylix.image}"
     spawn-at-startup "waybar"
     spawn-at-startup "mako"
     spawn-at-startup "${pkgs.hyprpolkitagent}/libexec/hyprpolkitagent"
@@ -70,6 +71,7 @@ in
         Mod+Shift+F { fullscreen-window; }
         Mod+Shift+Space { toggle-window-floating; }
         Mod+W       { switch-preset-column-width; }
+        Mod+Tab     { toggle-overview; }
 
         // Screenshot
         Print              { spawn "screenshot" "--copy"; }
@@ -93,8 +95,8 @@ in
         Mod+Shift+Up    { move-window-up; }
         Mod+Shift+Down  { move-window-down; }
         Mod+Shift+H     { move-column-left-or-to-monitor-left; }
-        Mod+Shift+J     { move-window-down; }
-        Mod+Shift+K     { move-window-up; }
+        Mod+Shift+J     { move-column-to-workspace-down; }
+        Mod+Shift+K     { move-column-to-workspace-up; }
         Mod+Shift+L     { move-column-right-or-to-monitor-right; }
 
         // Workspaces

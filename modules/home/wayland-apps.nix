@@ -68,6 +68,7 @@ in
     networkmanagerapplet
     poweralertd          # low-battery desktop notifications
     hyprpolkitagent      # GUI polkit prompt agent (replaces lxqt-policykit)
+    swaybg               # wallpaper setter
   ];
 
   programs.kitty.enable = true;        # stylix themes it
