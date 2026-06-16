@@ -30,7 +30,9 @@
   # Thunar (via exo) needs xfce4-mime-helper to launch its preferred
   # TerminalEmulator on "Open Terminal Here"; without `xfce4-settings`
   # it errors with "Could not find fallback TerminalEmulator application".
-  environment.systemPackages = [ pkgs.xfce4-settings ];
+  # xarchiver is the GUI backend that thunar-archive-plugin delegates to
+  # for right-click extraction — without it "Extract Here" fails.
+  environment.systemPackages = with pkgs; [ xfce4-settings xarchiver ];
 
   services.gvfs.enable = true;     # Thunar mounts, trash, network shares
   services.tumbler.enable = true;  # Thunar thumbnail generation

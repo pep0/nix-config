@@ -57,4 +57,13 @@
   # the boot menu that boots with the dGPU fully off, for max battery
   # on the road.
   hardware.nvidia.primeBatterySaverSpecialisation = true;
+
+  # spd5118: DDR5 SPD sensor driver fails resume because its I2C bus
+  # isn't ready in time — blacklisting silences the errors with no
+  # functional loss (the chip is only used for memory temp monitoring).
+  boot.blacklistedKernelModules = [ "spd5118" ];
+
+  # i915: disable Panel Self-Refresh to stop AUX/USBC/MST handshake
+  # failures when the Dell monitors resume over Thunderbolt/USB-C.
+  boot.kernelParams = [ "i915.enable_psr=0" ];
 }

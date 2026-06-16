@@ -21,4 +21,5 @@
   # mkDefault so a host can pin an older kernel if its out-of-tree
   # modules (e.g. broadcom-sta on the macbook) break on bleeding edge.
   boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
+
 }
