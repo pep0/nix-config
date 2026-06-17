@@ -21,6 +21,8 @@
     # Nushell config is verbose; keeping it minimal here. Add to
     # extraConfig as you build out keybindings, hooks, etc.
     extraConfig = ''
+      $env.EDITOR = "hx"
+      $env.VISUAL = "hx"
       $env.config = {
         show_banner: false,
         edit_mode: vi,

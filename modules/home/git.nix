@@ -23,7 +23,7 @@
     # https://github.com/settings/ssh/new with type "Signing Key" to
     # make the "Verified" badge appear on commits.
     signing = {
-      signByDefault = true;
+      # signByDefault = true;
       format = "ssh";
       key = "~/.ssh/id_ed25519.pub";
     };
