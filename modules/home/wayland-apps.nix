@@ -81,8 +81,11 @@ in
   services.mako.enable = true;
 
   # Idle daemon: lock → suspend. Compositor-agnostic, calls hyprlock.
+  # -w: wait for the lock command to exit before resuming the idle counter,
+  # preventing an immediate re-lock if the user takes >5min to unlock.
   services.swayidle = {
     enable = true;
+    extraArgs = [ "-w" ];
     timeouts = [
       { timeout = 300;  command = "${pkgs.hyprlock}/bin/hyprlock"; }            # 5min: lock
       { timeout = 600;  command = "${pkgs.systemd}/bin/systemctl suspend"; }    # 10min: suspend
