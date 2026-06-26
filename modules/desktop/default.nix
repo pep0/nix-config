@@ -36,7 +36,8 @@
         "org.freedesktop.impl.portal.Screenshot" = [ "gnome" ];
       };
       niri = {
-        default = [ "gnome" "gtk" ];
+        # gtk doesn't need gnome-shell; gnome portal fails silently without it
+        default = [ "gtk" ];
         "org.freedesktop.impl.portal.ScreenCast" = [ "gnome" ];
         "org.freedesktop.impl.portal.Screenshot" = [ "gnome" ];
       };

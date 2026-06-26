@@ -26,6 +26,7 @@
     # Misc
     deluge          # torrent client
     remmina         # remote desktop
+    dust
   ];
 
   # Keep Loupe the default image viewer (so installing other tools doesn't
