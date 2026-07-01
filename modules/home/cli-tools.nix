@@ -9,15 +9,21 @@
   # (`nix profile install .#profile`); the two lists are kept in sync
   # by hand. If you only run NixOS, you can ignore `make profile`.
 
+  # Helix's native "dracula" theme is a hand-tuned mapping (e.g. strings
+  # yellow, functions green) that stylix's generic base16 template doesn't
+  # reproduce, so it opts out of stylix theming here while everything else
+  # stays on stylix.
+  stylix.targets.helix.enable = false;
+
   programs.helix = {
     enable = true;
     defaultEditor = true;
     settings = {
+      theme = "dracula";
       editor = {
         bufferline = "multiple";
         cursorline = true;
         line-number = "relative";
-        true-color = false;
         trim-trailing-whitespace = true;
         statusline.left = [ "mode" "spinner" "version-control" "file-name" ];
         file-picker.hidden = false;

@@ -10,6 +10,12 @@
   # Steam/Wine.
   hardware.graphics.enable = true;
 
+  # Tell Electron apps (Typora, Slack, Teams, ...) to use the Wayland
+  # ozone backend. Without this they default to X11 ozone, find no
+  # $DISPLAY on this XWayland-less niri session, and hang instead of
+  # exiting cleanly.
+  environment.sessionVariables.NIXOS_OZONE_WL = "1";
+
   # greetd + tuigreet: minimal TTY-style login manager. Without --cmd
   # we get a session picker — the user arrows between Hyprland / niri.
   # `--remember-session` makes tuigreet land on the last-picked one.

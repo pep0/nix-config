@@ -1,5 +1,13 @@
 { pkgs, ... }:
 let
+  # Guard against duplicate hyprlock instances. ext-session-lock-v1 allows
+  # only one locker to hold the lock at a time — a queued second instance
+  # acquires it the moment the first exits, causing an immediate re-lock.
+  # This script is used for all lock triggers (timeout, before-sleep, lock
+  # event, and the Mod+Escape keybind in niri).
+  lock = pkgs.writeShellScriptBin "lock" ''
+    pgrep -x hyprlock || ${pkgs.hyprlock}/bin/hyprlock
+  '';
   # `screenshot --copy|--save|--swappy` — single CLI for the three
   # things you actually do with screenshots. Saves to
   # ~/Pictures/Screenshots/<ISO timestamp>.png on --save.
@@ -37,7 +45,7 @@ let
       | ${pkgs.fuzzel}/bin/fuzzel --dmenu --hide-prompt --width 18 --lines 5)
 
     case "$choice" in
-      *Lock)     ${pkgs.hyprlock}/bin/hyprlock ;;
+      *Lock)     ${lock}/bin/lock ;;
       *Logout)   niri msg action quit ;;
       *Suspend)  systemctl suspend ;;
       *Reboot)   systemctl reboot ;;
@@ -56,6 +64,7 @@ in
   home.packages = with pkgs; [
     screenshot
     powermenu
+    lock
     grim
     slurp
     swappy
@@ -87,13 +96,13 @@ in
     enable = true;
     extraArgs = [ "-w" ];
     timeouts = [
-      { timeout = 300;  command = "${pkgs.hyprlock}/bin/hyprlock"; }            # 5min: lock
-      { timeout = 600;  command = "${pkgs.systemd}/bin/systemctl suspend"; }    # 10min: suspend
+      { timeout = 300;  command = "${lock}/bin/lock"; }
+      { timeout = 600;  command = "${pkgs.systemd}/bin/systemctl suspend"; }
     ];
     # 26.05 changed events from list to attrset.
     events = {
-      before-sleep = "${pkgs.hyprlock}/bin/hyprlock";
-      lock         = "${pkgs.hyprlock}/bin/hyprlock";
+      before-sleep = "${lock}/bin/lock";
+      lock         = "${lock}/bin/lock";
     };
   };
 }

@@ -16,6 +16,8 @@
     # Image / document viewers
     loupe
     evince
+    foliate
+    typora
 
     # Networking / VPN
     openvpn

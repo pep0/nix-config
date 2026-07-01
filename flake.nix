@@ -39,9 +39,12 @@
       url = "github:sodiboo/niri-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # claude-code: auto-updated hourly, always tracks the latest release.
+    claude-code-nix.url = "github:sadjow/claude-code-nix";
   };
 
-  outputs = { self, nixpkgs, home-manager, nixos-hardware, lanzaboote, stylix, sops-nix, niri, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, nixos-hardware, lanzaboote, stylix, sops-nix, niri, claude-code-nix, ... }@inputs:
     let
       system = "x86_64-linux";
 
@@ -67,6 +70,8 @@
           hostPath
           home-manager.nixosModules.home-manager
           {
+            nixpkgs.overlays = [ claude-code-nix.overlays.default ];
+
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.backupFileExtension = "hm-bak";

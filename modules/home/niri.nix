@@ -63,7 +63,7 @@ in
         Mod+E      { spawn "thunar"; }
         Mod+P      { spawn "powermenu"; }
         Mod+N      { spawn "makoctl" "dismiss" "--all"; }
-        Mod+Escape { spawn "hyprlock"; }
+        Mod+Escape { spawn "lock"; }
 
         // Window management
         Mod+Q       { close-window; }
@@ -119,9 +119,6 @@ in
         XF86AudioPlay { spawn "playerctl" "play-pause"; }
         XF86AudioNext { spawn "playerctl" "next"; }
         XF86AudioPrev { spawn "playerctl" "previous"; }
-    }
-    output "eDP-1" {
-        off
     }
     output "Dell Inc. DELL U2421E 7K69DP3" {
     mode "1920x1200@59.950"

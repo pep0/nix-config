@@ -13,6 +13,10 @@
         "widget.use-xdg-desktop-portal.file-picker" = 1;
         # Use portal for MIME handler (open-with dialogs).
         "widget.use-xdg-desktop-portal.mime-handler" = 1;
+        # Block known trackers only (mode 4) instead of total cookie isolation
+        # (mode 5 default). Mode 5 sends Sec-Fetch-Storage-Access: none which
+        # causes SharePoint/OneDrive embedded in Outlook to return HTTP 403.
+        "network.cookie.cookieBehavior" = 4;
       };
     };
   };
