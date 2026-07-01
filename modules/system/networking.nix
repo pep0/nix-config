@@ -4,7 +4,7 @@
 
   networking.networkmanager.dispatcherScripts = [
     {
-      source = pkgs.writeText "wifi-wired-exclusive" ''
+      source = pkgs.writeShellScript "wifi-wired-exclusive" ''
         if [ "$2" = "up" ] || [ "$2" = "down" ]; then
           has_wired=$(${pkgs.networkmanager}/bin/nmcli -t -f DEVICE,TYPE,STATE dev | grep 'ethernet:connected' | grep -c .)
           if [ "$has_wired" -gt 0 ]; then
