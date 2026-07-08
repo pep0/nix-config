@@ -16,7 +16,14 @@
     # Image / document viewers
     loupe
     evince
-    foliate
+    # WebKitGTK's DMA-BUF renderer silently drops image content (text/vector
+    # still draws) on this hybrid Intel+NVIDIA laptop. Force it off for Foliate.
+    (foliate.overrideAttrs (old: {
+      postFixup = ''
+        ${old.postFixup or ""}
+        wrapProgram $out/bin/foliate --set WEBKIT_DISABLE_DMABUF_RENDERER 1
+      '';
+    }))
     typora
 
     # Networking / VPN

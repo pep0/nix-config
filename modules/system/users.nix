@@ -8,6 +8,7 @@
       "networkmanager"   # nmcli without root
       "video"            # backlight, GPU
       "audio"            # ALSA/Pipewire device access
+      "dialout"          # serial devices (/dev/ttyACM*) — Chrysalis/keyboard flashing
     ];
     shell = pkgs.nushell;
   };
