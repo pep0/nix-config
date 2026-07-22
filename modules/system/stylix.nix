@@ -23,6 +23,15 @@
       hash = "sha256-ThvTekcP2fUBEwa5GfpFE7jUwxBF+Gl0St7EUGnVtsQ=";
     };
 
+    # Without this, stylix falls back to whatever cursor theme happens
+    # to be installed (often a low-res default) — Bibata is crisp at
+    # HiDPI sizes and themes consistently across GTK/Qt.
+    cursor = {
+      package = pkgs.bibata-cursors;
+      name = "Bibata-Modern-Classic";
+      size = 24;
+    };
+
     fonts = {
       monospace = {
         package = pkgs.nerd-fonts.jetbrains-mono;
