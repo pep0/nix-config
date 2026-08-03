@@ -46,10 +46,14 @@
     libvdpau-va-gl
   ];
 
+  # GBM_BACKEND/__GLX_VENDOR_LIBRARY_NAME must NOT go here: this session
+  # runs on Intel (see above), and forcing every process onto NVIDIA's
+  # GBM/EGL path while niri scans out via Intel KMS corrupts WebRender's
+  # glyph atlas compositing (Firefox chrome renders icons but no text).
+  # The `nvidia-offload` wrapper already scopes the right vars to
+  # processes that actually want the dGPU.
   environment.sessionVariables = {
     LIBVA_DRIVER_NAME = "iHD";
-    GBM_BACKEND = "nvidia-drm";
-    __GLX_VENDOR_LIBRARY_NAME = "nvidia";
     NVD_BACKEND = "direct";
   };
 
