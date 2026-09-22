@@ -1,12 +1,24 @@
 { pkgs, ... }:
 let
-  # Guard against duplicate hyprlock instances. ext-session-lock-v1 allows
-  # only one locker to hold the lock at a time — a queued second instance
-  # acquires it the moment the first exits, causing an immediate re-lock.
-  # This script is used for all lock triggers (timeout, before-sleep, lock
-  # event, and the Mod+Escape keybind in niri).
+  # Used for all lock triggers (timeout, before-sleep, lock event, and the
+  # Mod+Escape keybind in niri).
+  #
+  # flock guards against duplicate hyprlock instances: ext-session-lock-v1
+  # allows only one locker at a time, and a queued second instance acquires
+  # the lock the moment the first exits, causing an immediate re-lock. It
+  # replaces a `pgrep -x hyprlock ||` test that never worked — swayidle.service
+  # runs with a bash-only PATH, so pgrep was always "command not found".
+  #
+  # Detached on purpose: swayidle -w stops its event loop until the command
+  # returns, so waiting on hyprlock itself parks every idle timeout that
+  # elapses during the lock and delivers them all at unlock — which fired
+  # `systemctl suspend` a second after typing the password. The sleep still
+  # gives hyprlock time to cover the screen before a before-sleep suspend
+  # proceeds.
   lock = pkgs.writeShellScriptBin "lock" ''
-    pgrep -x hyprlock || ${pkgs.hyprlock}/bin/hyprlock
+    ${pkgs.util-linux}/bin/flock -n "''${XDG_RUNTIME_DIR:-/tmp}/hyprlock.lock" \
+      ${pkgs.hyprlock}/bin/hyprlock &
+    ${pkgs.coreutils}/bin/sleep 0.5
   '';
   # `screenshot --copy|--save|--swappy` — single CLI for the three
   # things you actually do with screenshots. Saves to
@@ -90,8 +102,9 @@ in
   services.mako.enable = true;
 
   # Idle daemon: lock → suspend. Compositor-agnostic, calls hyprlock.
-  # -w: wait for the lock command to exit before resuming the idle counter,
-  # preventing an immediate re-lock if the user takes >5min to unlock.
+  # -w: wait for each command to return, so the before-sleep lock has painted
+  # before the system sleeps. Every command here must return promptly — see
+  # the `lock` script above.
   services.swayidle = {
     enable = true;
     extraArgs = [ "-w" ];

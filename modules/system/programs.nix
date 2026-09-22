@@ -37,7 +37,7 @@
     xarchiver
 
     # --- Extensions for Terminal & File Handlers ---
-    xfce.xfce4-terminal # Or your preferred terminal like alacritty, kitty, etc.
+    xfce4-terminal
     xdg-utils           # Provides xdg-open, helping Thunar find default apps
     shared-mime-info    # Helps systems correctly identify text/plain files
   ];

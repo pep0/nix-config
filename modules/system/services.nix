@@ -1,10 +1,20 @@
 { pkgs, ... }:
 {
-  # OpenSSH daemon. The firewall is on with no ports open, so port 22
-  # stays blocked at the network boundary — you can ssh OUT and (with
-  # tailscale up) reach this host over the mesh, but unsolicited inbound
-  # from the public internet is dropped.
-  services.openssh.enable = true;
+  # OpenSSH daemon, reachable over tailscale only: `openFirewall` would
+  # otherwise punch 22 through on every interface, including whatever
+  # café Wi-Fi the laptop is on. tailscale.nix trusts tailscale0, so the
+  # mesh still reaches sshd.
+  #
+  # Keys only — passwords are the thing worth brute-forcing, and every
+  # host that needs in already has a key.
+  services.openssh = {
+    enable = true;
+    openFirewall = false;
+    settings = {
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
+    };
+  };
 
   # Periodic SSD trim (weekly by default).
   services.fstrim.enable = true;

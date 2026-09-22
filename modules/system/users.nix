@@ -9,6 +9,7 @@
       "video"            # backlight, GPU
       "audio"            # ALSA/Pipewire device access
       "dialout"          # serial devices (/dev/ttyACM*) — Chrysalis/keyboard flashing
+      "kvm"              # /dev/kvm — hardware-accelerated VMs/emulators
     ];
     shell = pkgs.nushell;
 

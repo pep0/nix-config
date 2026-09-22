@@ -32,6 +32,9 @@
     # Security
     keepassxc
 
+    # Diagrams
+    drawio
+
     # Misc
     deluge          # torrent client
     remmina         # remote desktop

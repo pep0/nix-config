@@ -1,4 +1,4 @@
-{ pkgs, inputs, stateVersion, ... }:
+{ pkgs, lib, config, inputs, stateVersion, ... }:
 {
   imports = [
     # Generated for you by `nixos-generate-config` during install.
@@ -56,6 +56,31 @@
     LIBVA_DRIVER_NAME = "iHD";
     NVD_BACKEND = "direct";
   };
+
+  # Linux 7.2 finished removing strncpy() from the kernel and renamed
+  # drm_atomic_state -> drm_atomic_commit; nvidia-open 595 still uses both,
+  # so its modules don't compile. CachyOS carries the backport. Drop this
+  # block (it will then fail to apply, loudly) once nixpkgs ships a driver
+  # that builds on 7.2 — see NVIDIA/open-gpu-kernel-modules#1224.
+  hardware.nvidia.package =
+    let
+      base = config.boot.kernelPackages.nvidiaPackages.${config.hardware.nvidia.branch};
+      kernel72Patch = pkgs.fetchurl {
+        name = "nvidia-open-linux-7.2-support.patch";
+        url = "https://github.com/CachyOS/CachyOS-PKGBUILDS/raw/94bcd86886298f7798837a38dc1ff361d60a9c8d/nvidia/nvidia-utils/0001-make-Add-support-for-7.2-Kernel.patch";
+        hash = "sha256-hdklzeaY0s/0RME+CtQoddwOuTkSh+/jNdDD6t7cC48=";
+      };
+    in
+    if lib.versionAtLeast config.boot.kernelPackages.kernel.version "7.2" then
+      base.overrideAttrs (old: {
+        passthru = old.passthru // {
+          open = old.passthru.open.overrideAttrs (o: {
+            patches = (o.patches or [ ]) ++ [ kernel72Patch ];
+          });
+        };
+      })
+    else
+      base;
 
   # Free win from nixos-hardware: adds a "battery-saver" generation to
   # the boot menu that boots with the dGPU fully off, for max battery

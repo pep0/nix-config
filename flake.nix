@@ -13,7 +13,10 @@
 
     # Hardware quirks for ThinkPads, MacBooks, etc. Per-host modules
     # are imported from the relevant hosts/<name>/default.nix file.
-    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    nixos-hardware = {
+      url = "github:NixOS/nixos-hardware/master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # Lanzaboote: Secure Boot for NixOS. Pin to a release tag.
     lanzaboote = {
@@ -50,7 +53,10 @@
     };
 
     # claude-code: auto-updated hourly, always tracks the latest release.
-    claude-code-nix.url = "github:sadjow/claude-code-nix";
+    claude-code-nix = {
+      url = "github:sadjow/claude-code-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = { self, nixpkgs, home-manager, nixos-hardware, lanzaboote, stylix, sops-nix, niri, claude-code-nix, nixpkgs-firefox-pin, ... }@inputs:
@@ -113,12 +119,19 @@
         macbook  = mkSystem ./hosts/macbook;    # MacBook Pro Mid 2014, 13" (MacBookPro11,1)
       };
 
+      # `nix fmt` / `make fmt`.
+      formatter.${system} = pkgs.nixpkgs-fmt;
+
       # ---------------------------------------------------------------
       # User profile: `nix profile install .#profile`
       # ---------------------------------------------------------------
       packages.${system} = {
         profile = import ./profile { inherit pkgs; };
         default = self.packages.${system}.profile;
+
+        # The generated wallpaper, for previewing a layout without a
+        # rebuild: `nix build .#wallpaper && xdg-open result`.
+        wallpaper = self.nixosConfigurations.thinkpad.config.stylix.image;
       };
     };
 }

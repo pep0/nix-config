@@ -15,7 +15,6 @@
       l = "ls";                  # list
       m = "btop";                # system monitor
       o = "xdg-open";            # open file in default app
-      t = "taskwarrior-tui";     # task manager (only works if installed)
     };
 
     # Nushell config is verbose; keeping it minimal here. Add to

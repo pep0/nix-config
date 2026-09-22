@@ -2,7 +2,7 @@
 {
   # Generic Wayland desktop infrastructure: graphics stack, login
   # manager, portals, polkit, fonts. Compositor-specific config lives
-  # in sibling modules (hyprland.nix, niri.nix).
+  # in niri.nix.
 
   # OpenGL / graphics stack. Required for any Wayland compositor.
   # Hardware-specific drivers (intel-media-driver, etc) come from
@@ -17,8 +17,8 @@
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
   # greetd + tuigreet: minimal TTY-style login manager. Without --cmd
-  # we get a session picker — the user arrows between Hyprland / niri.
-  # `--remember-session` makes tuigreet land on the last-picked one.
+  # we get a session picker; `--remember-session` makes tuigreet land on
+  # the last-picked one.
   services.greetd = {
     enable = true;
     settings = {

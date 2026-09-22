@@ -1,4 +1,10 @@
 { pkgs, config, inputs, ... }:
+let
+  # Bound once and used for both options below: reading
+  # `config.stylix.base16Scheme` from inside the wallpaper derivation would
+  # tangle the scheme with the image stylix can derive a scheme *from*.
+  base16Scheme = "${pkgs.base16-schemes}/share/themes/dracula.yaml";
+in
 {
   imports = [ inputs.stylix.nixosModules.stylix ];
 
@@ -10,18 +16,16 @@
     enable = true;
     polarity = "dark";
 
-    # Pinning the scheme keeps colors stable regardless of the wallpaper.
-    # base16-schemes ships hundreds of YAML schemes — swap the filename
-    # to e.g. `catppuccin-mocha.yaml`, `gruvbox-dark-medium.yaml`, or
-    # `tokyo-night-storm.yaml` to change the entire system theme.
-    # base16Scheme = "${pkgs.base16-schemes}/share/themes/tokyo-night-dark.yaml";
-    # base16Scheme = "${pkgs.base16-schemes}/share/themes/qualia.yaml";
-    base16Scheme = "${pkgs.base16-schemes}/share/themes/dracula.yaml";
+    # base16-schemes ships hundreds of YAML schemes — swap the filename in
+    # the `let` above to e.g. `catppuccin-mocha.yaml`,
+    # `gruvbox-dark-medium.yaml` or `tokyo-night-storm.yaml` to change the
+    # entire system theme, wallpaper included.
+    inherit base16Scheme;
 
-    image = pkgs.fetchurl {
-      url = "https://static.simpledesktops.com/uploads/desktops/2017/02/07/traffic.png";
-      hash = "sha256-ThvTekcP2fUBEwa5GfpFE7jUwxBF+Gl0St7EUGnVtsQ=";
-    };
+    # Regenerated from the scheme rather than downloaded, so it follows the
+    # theme. The layout comes from pkgs/wallpaper/seed, which `make system`
+    # re-rolls; `make wallpaper` previews a new one without switching.
+    image = pkgs.callPackage ../../pkgs/wallpaper { inherit base16Scheme; };
 
     # Without this, stylix falls back to whatever cursor theme happens
     # to be installed (often a low-res default) — Bibata is crisp at

@@ -37,6 +37,7 @@
           normal = "block";
           select = "underline";
         };
+        soft-wrap.enable = true;
       };
       keys = {
         normal = {
