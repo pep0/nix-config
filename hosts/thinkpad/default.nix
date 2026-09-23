@@ -106,4 +106,12 @@
   # i915: disable Panel Self-Refresh to stop AUX/USBC/MST handshake
   # failures when the Dell monitors resume over Thunderbolt/USB-C.
   boot.kernelParams = [ "i915.enable_psr=0" ];
+
+  # boltd, to authorize the Thunderbolt 4 dock. The domain runs at
+  # security level "user", so the dock stays at authorized=0 and its
+  # PCIe functions — the ethernet NIC among them — never enumerate
+  # until something approves it. DP alt-mode is below that layer, which
+  # is why the monitors work on an unauthorized dock and the NIC does
+  # not. Enroll once with `boltctl enroll <uuid>` to make it stick.
+  services.hardware.bolt.enable = true;
 }

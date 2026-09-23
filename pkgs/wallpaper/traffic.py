@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Render the "traffic" block wallpaper from a base16 palette.
 
-A rectangle is cut up by recursive guillotine splits, every cell is
+The ground is packed with blocks of random width and depth, every one
 extruded to a random height and drawn in oblique projection with flat
 fills and a dark outline. Writes SVG to --out, or stdout.
 """
@@ -29,41 +29,42 @@ CX, CY = -0.583, 1.000  # down off the front edge, one unit of height
 # requested one.
 REF_W, REF_H = 2880.0, 1800.0
 GROUND_W, GROUND_L = 708.0, 559.0
-UNIT_W = 21.0  # the width grid; columns are whole multiples of this
-CELL_L = (66.0, 175.0)  # cell extent along B: min, max
+# The lattice every block edge sits on. Fine enough that it never reads as
+# a grid; it only keeps neighbours flush so gaps stay one constant width.
+UNIT_W, UNIT_L = 21.0, 11.0
 STROKE = 3.2
 
 # A cell keeps only part of its slot. The strip left over along the depth
 # axis is the gap the block in front needs for this block's front face to
-# stay in view; the one along the width axis holds neighbouring columns
-# apart and uncovers a sliver of the left face behind it.
+# stay in view; the one along the width axis holds neighbours apart and
+# uncovers a sliver of the left face behind it.
 # GAP_V has to clear the tallest block, or the one in front rides up over
-# the front face and leaves nothing but ground showing. GAP_U comes off
-# every cell, so it doubles as how thin a one-unit column ends up.
+# the front face and leaves nothing but ground showing.
 GAP_U, GAP_V = 7.0, 19.0
 
-# Kept in a narrow band, and under GAP_V: tall next to short is what opens
-# grey wedges between neighbours.
-HEIGHTS = [14.0, 16.0, 18.0]
-HEIGHT_WEIGHTS = [4, 5, 4]
+# Drawn continuously from a narrow band, so no two neighbours match
+# exactly: tall next to short is what opens grey wedges between them. The
+# top must stay under GAP_V, or a body reaches over the block in front.
+HEIGHT = (11.0, 18.0)
 
-# How far a column's near and far ends wander, so the plane frays at the
-# edges instead of every column starting off one straight baseline.
-STAGGER = 26.0
+# Block extents in lattice units, as (units, weight). Width and depth are
+# drawn independently, so every aspect shows up — wide flat slabs, long
+# thin strips, squares. Both lean small, so the big ones stay rare enough
+# to stand out.
+WIDTHS = [(1, 30), (2, 26), (3, 16), (4, 9), (5, 5), (6, 3), (8, 1)]
+LENGTHS = [(4, 14), (5, 14), (6, 12), (7, 10), (8, 9), (10, 8), (12, 6), (14, 5), (16, 4)]
+# Largest block, as width units times depth units. Width and depth are
+# otherwise independent; this is what keeps a wide draw shallow while a
+# narrow one can still run long.
+MAX_AREA = 20
+# Shallowest a block may be, in units. Space left in front of a block that
+# is shallower than this gets folded into the block instead of left as a
+# sliver.
+MIN_L = 4
 
-# Column widths, as (units, weight). They are whole multiples of CELL_W's
-# minimum and nothing else, which is how the original's measure: its pitches
-# cluster on ~20, 41, 61 and 88px with no intermediate widths at all. A
-# continuous range instead fills that space with almost-matching neighbours,
-# and a row of columns that are nearly-but-not-quite equal is what reads as
-# repetition.
-WIDTH_UNITS = [(1, 64), (2, 20), (3, 4), (4, 12)]
-
-# How often a cell already inside its depth budget is cut across its width
-# instead. Nothing else varies a column's width down its own length — a
-# column that never does this is one unbroken run of a single width — so it
-# has to happen often to show up at all.
-SPLIT_U = 0.45
+# How many units each lattice column's near and far ends can pull in, so
+# the plane frays at the edges instead of ending on a straight line.
+FRAY = 3
 
 # Relative frequency of each fill, in the order given. From a pixel census
 # of the original: one hue carries the picture, one is a rare accent.
@@ -133,67 +134,62 @@ def palette(args):
     )
 
 
-def build_cells(rng, gw, gl, unit_w, min_l, max_l, stagger):
+def build_cells(rng, gw, gl, unit_w, unit_l):
+    """Skyline packing of the ground on a lattice.
+
+    `sky[u]` is how far column u is filled. Each step fills the lowest flat
+    run of the skyline with a block of independently drawn width and depth.
+    A plain front-to-back scan instead leaves a jagged frontier whose narrow
+    notches clip every block's width but hardly ever its depth, and the
+    result is all tall strips.
+    """
+    nu, nv = int(gw // unit_w), int(gl // unit_l)
+    sky = [rng.randint(0, FRAY) for _ in range(nu)]
+    end = [nv - rng.randint(0, FRAY) for _ in range(nu)]
+    widths, wweights = zip(*WIDTHS)
+    lengths, lweights = zip(*LENGTHS)
+
+    def open_(u):
+        return end[u] - sky[u] >= MIN_L
+
     cells = []
+    while True:
+        todo = [u for u in range(nu) if open_(u)]
+        if not todo:
+            return cells
+        low = min(sky[u] for u in todo)
+        a = next(u for u in todo if sky[u] == low)
+        b = a
+        while b < nu and sky[b] == low and open_(b):
+            b += 1
 
-    def column_spans():
-        # Take the whole row's worth of widths by target proportion and
-        # shuffle, rather than sampling each column independently: only two
-        # dozen columns fit, and independent draws come out lumpy enough that
-        # a layout can end up all slivers or all slabs.
-        total = sum(wt for _, wt in WIDTH_UNITS)
-        mean = sum(k * unit_w * wt for k, wt in WIDTH_UNITS) / total
-        n = round(gw / mean) + 2
-        widths = [
-            k * unit_w
-            for k, wt in WIDTH_UNITS
-            for _ in range(max(1, round(n * wt / total)))
-        ]
-        rng.shuffle(widths)
-        # Deal them out rather than laying the shuffle down as-is, refusing a
-        # fourth neighbour of the same width: a plain shuffle clumps five or
-        # six slivers in a row, where the original runs at most three.
-        spans, u, placed, pool = [], 0.0, [], widths
-        while pool:
-            fits = [i for i, w in enumerate(pool) if u + w <= gw]
-            if not fits:
+        run = b - a
+        w = min(rng.choices(widths, wweights)[0], run)
+        u0 = a if rng.random() < 0.5 else b - w
+        u1 = u0 + w
+
+        limit = min(end[u0:u1])
+        l = rng.choices(lengths, lweights)[0]
+        top = low + max(min(l, MAX_AREA // w), MIN_L)
+        # Snap level with a neighbour that is nearly level anyway. This is
+        # what keeps the skyline flat enough for wide blocks to find room.
+        for n in (u0 - 1, u1):
+            if (
+                0 <= n < nu
+                and abs(top - sky[n]) < MIN_L
+                and MIN_L <= sky[n] - low <= max(MAX_AREA // w, MIN_L)
+            ):
+                top = sky[n]
                 break
-            spread = [i for i in fits if placed[-3:] != [pool[i]] * 3]
-            w = pool.pop((spread or fits)[0])
-            spans.append((u, u + w))
-            u += w
-            placed.append(w)
-        return spans
-
-    def carve(u0, u1, v0, v1, depth):
-        w, l = u1 - u0, v1 - v0
-        # A split is either mandatory, because the cell is over its budget
-        # on that axis, or an occasional one for variety. Cutting along the
-        # depth axis is the common case; cutting a column's width is rare,
-        # which is what lets the wide ones survive as wide ones.
-        want_v = l > max_l or rng.random() < 0.55
-        units = round(w / unit_w)
-        if depth and l >= 2 * min_l and want_v:
-            t = min(max(l * rng.uniform(0.2, 0.8), min_l), l - min_l)
-            carve(u0, u1, v0, v0 + t, depth - 1)
-            carve(u0, u1, v0 + t, v1, depth - 1)
-        elif depth and units >= 2 and rng.random() < SPLIT_U:
-            # Split on the unit grid too, so the widths a column shows at
-            # one depth are the same ones its neighbours show at another.
-            t = rng.randint(1, units - 1) * unit_w
-            carve(u0, u0 + t, v0, v1, depth - 1)
-            carve(u0 + t, u1, v0, v1, depth - 1)
-        else:
-            cells.append((u0, u1, v0, v1))
-
-    for u0, u1 in column_spans():
-        v0 = rng.uniform(0.0, stagger)
-        v1 = gl - rng.uniform(0.0, stagger)
-        if u1 - u0 <= 2 * unit_w and rng.random() < 0.12:
-            cells.append((u0, u1, v0, v1))
-        else:
-            carve(u0, u1, v0, v1, 7)
-    return cells
+        # Too close to the far edge for another block: pull back to leave
+        # room for one, by a random amount so the last row doesn't line up,
+        # if that still leaves this one deep enough; else run to the edge.
+        if limit - top < MIN_L:
+            back = limit - rng.randint(MIN_L, 2 * MIN_L)
+            top = back if back - low >= MIN_L else limit
+        for u in range(u0, u1):
+            sky[u] = top
+        cells.append((u0 * unit_w, u1 * unit_w, low * unit_l, top * unit_l))
 
 
 def project(u, v):
@@ -210,13 +206,15 @@ def render(args):
         rng,
         GROUND_W * s,
         GROUND_L * s,
-        *(x * s for x in (UNIT_W,) + CELL_L + (STAGGER,)),
+        UNIT_W * s,
+        UNIT_L * s,
     )
 
-    # Painter's order: right to left, then back to front. A box's body hangs
-    # down and to the left, so the only boxes it can ever reach over are the
-    # ones nearer the viewer — further left, or further forward in the same
-    # column — and those have to be drawn after it to cover it back up.
+    # Painter's order: right to left. A box's body hangs down and to the
+    # left, over whatever sits beside it on the left, so that has to be
+    # drawn after it. Boxes whose depth ranges don't overlap never meet on
+    # screen at all — GAP_V clears the tallest body — so right to left is
+    # the only order that matters; depth just breaks ties.
     cells.sort(key=lambda c: (-c[0], c[2]))
 
     quads, xs, ys = [], [], []
@@ -224,7 +222,7 @@ def render(args):
         u1, v1 = u1 - GAP_U * s, v1 - GAP_V * s
         if u1 <= u0 or v1 <= v0:
             continue
-        h = rng.choices(HEIGHTS, HEIGHT_WEIGHTS)[0] * s
+        h = rng.uniform(*HEIGHT) * s
         top = [project(u0, v0), project(u1, v0), project(u1, v1), project(u0, v1)]
 
         base = [(x + h * CX, y + h * CY) for x, y in top]

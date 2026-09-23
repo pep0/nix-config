@@ -70,6 +70,9 @@ in
   # handled by the waybar modules, so the applet icons would be duplicates.
   xdg.configFile."autostart/blueman.desktop".text = "[Desktop Entry]\nHidden=true\n";
   xdg.configFile."autostart/nm-applet.desktop".text = "[Desktop Entry]\nHidden=true\n";
+  # Remmina writes this itself; its full-colour tray icon clashes with the
+  # monochrome bar, and it is only ever opened on demand anyway.
+  xdg.configFile."autostart/remmina-applet.desktop".text = "[Desktop Entry]\nHidden=true\n";
 
   # Wayland apps: tools spawned by niri binds and hardware-control utilities.
 
