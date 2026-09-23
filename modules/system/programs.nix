@@ -35,6 +35,11 @@
   environment.systemPackages = with pkgs; [
     xfce4-settings
     xarchiver
+    # xarchiver shells out to these per format
+    _7zz
+    unrar
+    unzip
+    zip
 
     xdg-utils           # xdg-open, so Thunar can find default apps
     shared-mime-info    # type detection for text/plain and friends
@@ -43,6 +48,13 @@
   # What exo hands "Open Terminal Here". kitty comes from home-manager,
   # so it is on PATH in the session Thunar is launched from.
   environment.variables.TERMINAL = "kitty";
+
+  # GLib launches Terminal=true entries (Helix.desktop) via xdg-terminal-exec;
+  # its fallback list doesn't include kitty.
+  xdg.terminal-exec = {
+    enable = true;
+    settings.default = [ "kitty.desktop" ];
+  };
 
   services.gvfs.enable = true;     # Thunar mounts, trash, network shares
   services.tumbler.enable = true;  # Thunar thumbnail generation

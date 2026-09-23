@@ -26,6 +26,16 @@
         show_banner: false,
         edit_mode: vi,
       }
+
+      # Remotes rarely have xterm-kitty terminfo; without it their shell
+      # skips bracketed paste and multi-line pastes break.
+      def --wrapped ssh [...args] {
+        if ($env.TERM? == "xterm-kitty") {
+          with-env { TERM: "xterm-256color" } { ^ssh ...$args }
+        } else {
+          ^ssh ...$args
+        }
+      }
     '';
   };
 

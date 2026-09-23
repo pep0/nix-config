@@ -49,8 +49,23 @@
     defaultApplications =
       let
         loupe = "org.gnome.Loupe.desktop";
+        helix = "Helix.desktop";
       in
       {
+        "text/plain"                = helix;
+        "text/x-nix"                = helix;
+        "text/x-log"                = helix;
+        "text/csv"                  = helix;
+        "text/x-python"             = helix;
+        "text/rust"                 = helix;
+        "application/json"          = helix;
+        "application/yaml"          = helix;
+        "application/x-yaml"        = helix;
+        "application/toml"          = helix;
+        "application/xml"           = helix;
+        "application/x-shellscript" = helix;
+        "application/x-zerosize"    = helix;
+
         "image/png"     = loupe;
         "image/jpeg"    = loupe;
         "image/gif"     = loupe;
