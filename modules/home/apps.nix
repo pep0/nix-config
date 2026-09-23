@@ -12,6 +12,7 @@
     # Communication
     slack
     teams-for-linux
+    tuba            # Mastodon
 
     # Image / document viewers
     loupe

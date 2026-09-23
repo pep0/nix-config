@@ -85,5 +85,9 @@
     # ai / dev shells
     claude-code
     devenv
+
+    # social
+    toot                   # Mastodon CLI
+    (callPackage ../../pkgs/tooi { })  # Mastodon TUI
   ];
 }

@@ -46,5 +46,7 @@ pkgs.buildEnv {
     # Misc
     devenv
     direnv
+    toot           # Mastodon CLI
+    (callPackage ../pkgs/tooi { })  # Mastodon TUI
   ];
 }
