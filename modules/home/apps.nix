@@ -8,6 +8,8 @@
     };
   };
 
+  programs.mpv.enable = true;   # stylix themes it
+
   home.packages = with pkgs; [
     # Communication
     slack
@@ -42,16 +44,31 @@
     dust
   ];
 
-  # Keep Loupe the default image viewer (so installing other tools doesn't
-  # silently steal the default handler for common image types).
+  # Pinned so installing other tools doesn't silently steal these handlers.
   xdg.mimeApps = {
     enable = true;
     defaultApplications =
       let
         loupe = "org.gnome.Loupe.desktop";
         helix = "Helix.desktop";
+        mpv = "mpv.desktop";
       in
       {
+        "inode/directory"           = "thunar.desktop";
+
+        "video/mp4"                 = mpv;
+        "video/x-matroska"          = mpv;
+        "video/webm"                = mpv;
+        "video/quicktime"           = mpv;
+        "video/x-msvideo"           = mpv;
+        "video/mpeg"                = mpv;
+        "audio/mpeg"                = mpv;
+        "audio/flac"                = mpv;
+        "audio/ogg"                 = mpv;
+        "audio/x-wav"               = mpv;
+        "audio/mp4"                 = mpv;
+        "audio/opus"                = mpv;
+
         "text/plain"                = helix;
         "text/x-nix"                = helix;
         "text/x-log"                = helix;

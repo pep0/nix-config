@@ -96,7 +96,7 @@ in
   ];
 
   programs.kitty.enable = true;        # stylix themes it
-  programs.waybar.enable = true;       # stylix themes it; systemd user service
+  programs.waybar.enable = true;       # stylix themes it; niri spawns it
   programs.fuzzel.enable = true;       # launcher; replaces wofi, stylix themes it
   programs.hyprlock.enable = true;     # lock screen; replaces swaylock
 

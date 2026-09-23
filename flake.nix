@@ -37,15 +37,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Pinned to the nixpkgs rev from just before the 2026-07-28 flake.lock
-    # update, which bumped Firefox 152.0.6 -> 153.0. 153.0 renders browser
-    # chrome (tab titles, URL bar text, the app menu popup) blank — icons
-    # and web content are unaffected, and it reproduces with a fresh
-    # profile and with acceleration/WebRender disabled, so it's a Firefox
-    # regression, not a config/theme/GPU issue. Remove this input (and the
-    # firefox overlay below) once nixos-26.05 carries a fixed Firefox.
-    nixpkgs-firefox-pin.url = "github:NixOS/nixpkgs/fd1462031fdee08f65fd0b4c6b64e22239a77870";
-
     # niri-flake: scrollable-tiling Wayland compositor.
     niri = {
       url = "github:sodiboo/niri-flake";
@@ -59,7 +50,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, nixos-hardware, lanzaboote, stylix, sops-nix, niri, claude-code-nix, nixpkgs-firefox-pin, ... }@inputs:
+  outputs = { self, nixpkgs, home-manager, nixos-hardware, lanzaboote, stylix, sops-nix, niri, claude-code-nix, ... }@inputs:
     let
       system = "x86_64-linux";
 
@@ -87,16 +78,6 @@
           {
             nixpkgs.overlays = [
               claude-code-nix.overlays.default
-
-              # Firefox 153.0 (current nixpkgs) renders browser chrome text
-              # blank — see nixpkgs-firefox-pin comment above. Pin back to
-              # 152.0.6 until upstream/nixpkgs fixes it.
-              (final: prev: {
-                firefox = (import nixpkgs-firefox-pin {
-                  inherit system;
-                  config.allowUnfree = true;
-                }).firefox;
-              })
             ];
 
             home-manager.useGlobalPkgs = true;

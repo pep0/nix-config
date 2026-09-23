@@ -21,6 +21,8 @@
     subGidRanges = [{ startGid = 100000; count = 65536; }];
   };
 
+  virtualisation.podman.enable = true;
+
   # Set an initial password with `passwd` after first boot.
   # Don't ship a real password in source control.
 }

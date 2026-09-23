@@ -35,11 +35,9 @@
   environment.systemPackages = with pkgs; [
     xfce4-settings
     xarchiver
-    # xarchiver shells out to these per format
+    # xarchiver shells out to these; zip/unzip come from cli-tools.nix
     _7zz
     unrar
-    unzip
-    zip
 
     xdg-utils           # xdg-open, so Thunar can find default apps
     shared-mime-info    # type detection for text/plain and friends

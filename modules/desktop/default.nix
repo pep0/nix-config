@@ -10,10 +10,8 @@
   # Steam/Wine.
   hardware.graphics.enable = true;
 
-  # Tell Electron apps (Typora, Slack, Teams, ...) to use the Wayland
-  # ozone backend. Without this they default to X11 ozone, find no
-  # $DISPLAY on this XWayland-less niri session, and hang instead of
-  # exiting cleanly.
+  # Electron apps (Typora, Slack, Teams, ...) run natively on Wayland
+  # instead of going through xwayland-satellite.
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
   # greetd + ReGreet (GTK4 greeter in cage). Stylix themes it with the
