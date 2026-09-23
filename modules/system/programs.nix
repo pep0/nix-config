@@ -36,16 +36,13 @@
     xfce4-settings
     xarchiver
 
-    # --- Extensions for Terminal & File Handlers ---
-    xfce4-terminal
-    xdg-utils           # Provides xdg-open, helping Thunar find default apps
-    shared-mime-info    # Helps systems correctly identify text/plain files
+    xdg-utils           # xdg-open, so Thunar can find default apps
+    shared-mime-info    # type detection for text/plain and friends
   ];
 
-  # Force Thunar/Exo to recognize your global terminal preference
-  environment.variables = {
-    TERMINAL = "xfce4-terminal"; # Change this to "alacritty", "kitty", etc., if using a different one
-  };
+  # What exo hands "Open Terminal Here". kitty comes from home-manager,
+  # so it is on PATH in the session Thunar is launched from.
+  environment.variables.TERMINAL = "kitty";
 
   services.gvfs.enable = true;     # Thunar mounts, trash, network shares
   services.tumbler.enable = true;  # Thunar thumbnail generation

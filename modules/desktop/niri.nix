@@ -7,4 +7,10 @@
   # `targets.niri` integration that themes niri to match base16Scheme,
   # enabled by default once stylix sees niri active.
   programs.niri.enable = true;
+
+  # niri-flake ships its own polkit-kde agent wanted by niri.service, and
+  # modules/home/niri.nix spawns hyprpolkitagent. Only one agent can
+  # register per subject, so the loser exits and burns its restart limit
+  # — whichever won the race. Keep hyprpolkitagent, drop this one.
+  systemd.user.services.niri-flake-polkit.enable = false;
 }

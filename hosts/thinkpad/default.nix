@@ -82,6 +82,17 @@
     else
       base;
 
+  # Runtime D3: with PRIME offload, the dGPU sits powered-on-and-idle
+  # unless something tells it to suspend. finegrained is that switch
+  # (NVreg_DynamicPowerManagement=0x02 plus the runtime-PM udev rules),
+  # and needs offload.enable, which nixos-hardware already sets.
+  # powerManagement saves/restores VRAM across suspend, which this
+  # machine does on every idle timeout.
+  hardware.nvidia.powerManagement = {
+    enable = true;
+    finegrained = true;
+  };
+
   # Free win from nixos-hardware: adds a "battery-saver" generation to
   # the boot menu that boots with the dGPU fully off, for max battery
   # on the road.
