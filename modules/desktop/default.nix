@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
   # Generic Wayland desktop infrastructure: graphics stack, login
   # manager, portals, polkit, fonts. Compositor-specific config lives
@@ -14,10 +14,24 @@
   # instead of going through xwayland-satellite.
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
-  # greetd + ReGreet (GTK4 greeter in cage). Stylix themes it with the
-  # same wallpaper and colours as hyprlock; the command stays the module's
-  # default because stylix warns on a custom one.
-  programs.regreet.enable = true;
+  # greetd + tuigreet: minimal TTY-style login manager. Without --cmd
+  # we get a session picker; `--remember-session` makes tuigreet land on
+  # the last-picked one.
+  #
+  # ReGreet (GTK4 greeter in cage) was tried here instead: it authenticates
+  # fine, but the chosen session (niri) exits within a second of the PAM
+  # session opening and drops back to the greeter — no niri/cage error in
+  # the journal, just an instant session close. Back to tuigreet until
+  # that's root-caused.
+  services.greetd = {
+    enable = true;
+    settings = {
+      default_session = {
+        command = "${lib.getExe pkgs.tuigreet} --time --remember --remember-session --asterisks";
+        user = "greeter";
+      };
+    };
+  };
 
   # XDG portals: how Wayland apps do file pickers, screen sharing, etc.
   # niri has no native portal so we route ScreenCast/Screenshot through
