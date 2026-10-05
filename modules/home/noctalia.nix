@@ -102,29 +102,39 @@ in
           type = "sysmon";
           stat = "ram_used";
         };
+        network.show_label = false;
       };
 
-      bar.main = {
-        start = [
-          "launcher"
-          "workspaces"
-        ];
-        center = [ "clock" ];
-        end = [
-          "tray"
-          "cpu"
-          "ram"
-          "volume"
-          "brightness"
-          "network"
-          "bluetooth"
-          "battery"
-          "keyboard_layout"
-          "notifications"
-          "control-center"
-          "session"
-        ];
-      };
+      bar.main =
+        let
+          group = id: members: {
+            inherit id members;
+            fill = "surface_variant";
+            padding = 8.0;
+            widget_spacing = 10;
+          };
+        in
+        {
+          widget_spacing = 10;
+          start = [
+            "launcher"
+            "workspaces"
+          ];
+          center = [ "clock" ];
+          end = [
+            "tray"
+            "group:sys"
+            "group:media"
+            "group:status"
+            "group:shell"
+          ];
+          capsule_group = [
+            (group "sys" [ "cpu" "ram" ])
+            (group "media" [ "volume" "brightness" ])
+            (group "status" [ "network" "bluetooth" "battery" "keyboard_layout" ])
+            (group "shell" [ "notifications" "control-center" "session" ])
+          ];
+        };
     };
   };
 }
