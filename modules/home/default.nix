@@ -6,7 +6,7 @@
     ./cli-tools.nix
     ./gtk.nix
     ./wayland-apps.nix
-    ./waybar.nix
+    ./noctalia.nix
     ./niri.nix
     ./browser.nix
     ./apps.nix

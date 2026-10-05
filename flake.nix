@@ -51,6 +51,11 @@
 
     # docker-sbx (Docker Sandboxes) — microVMs for coding agents.
     llm-agents.url = "github:numtide/llm-agents.nix";
+
+    # noctalia: Wayland shell (bar, notifications, launcher, lock, idle).
+    # `cachix` branch = latest commit already in noctalia.cachix.org; no
+    # nixpkgs follows, since that changes hashes and misses the cache.
+    noctalia.url = "github:noctalia-dev/noctalia/cachix";
   };
 
   outputs = { self, nixpkgs, home-manager, nixos-hardware, lanzaboote, stylix, sops-nix, niri, claude-code-nix, ... }@inputs:

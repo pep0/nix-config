@@ -9,9 +9,8 @@ Personal [NixOS](https://nixos.org/) flake for two machines. Tracks
 | `macbook`  | MacBook Pro Mid 2014, 13" (MacBookPro11,1)  |
 
 Hyprland and niri coexist as login sessions (picked at greetd), themed
-Tokyo Night via Stylix. Firefox as the browser, hyprlock + swayidle
-for lock/idle, mako for notifications, waybar for status, fuzzel as
-the launcher. Secrets via sops-nix; Secure Boot via Lanzaboote on
+Tokyo Night via Stylix. Firefox as the browser, noctalia as the
+shell (bar, notifications, launcher, lock, idle, wallpaper). Secrets via sops-nix; Secure Boot via Lanzaboote on
 the ThinkPad; TLP with `60/80` charge thresholds on both.
 
 ## Layout
@@ -27,10 +26,10 @@ the ThinkPad; TLP with `60/80` charge thresholds on both.
   same tools via home-manager already; `make profile` is a no-op there.
 
 Keybindings live in `modules/home/hyprland.nix` and
-`modules/home/niri.nix`; shared compositor apps + the `screenshot` /
-`powermenu` wrapper scripts in `modules/home/wayland-apps.nix`; shell
-aliases in `modules/home/shell.nix`; waybar layout in
-`modules/home/waybar.nix`. Theme is set by `modules/system/stylix.nix`
+`modules/home/niri.nix`; shared compositor apps + the `screenshot`
+wrapper script in `modules/home/wayland-apps.nix`; shell
+aliases in `modules/home/shell.nix`; bar layout in
+`modules/home/noctalia.nix`. Theme is set by `modules/system/stylix.nix`
 (the `base16Scheme` line); explicit color references in code use
 `config.lib.stylix.colors.base0X`.
 

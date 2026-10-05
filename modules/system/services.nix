@@ -24,7 +24,7 @@
   services.upower.enable = true;
 
   # Don't suspend the moment the power button is tapped — route it
-  # through the powermenu instead (Mod+P).
+  # through noctalia's session panel instead (Mod+P).
   services.logind.settings.Login.HandlePowerKey = "ignore";
 
   # Don't wait the systemd default 90s on a hanging unit at shutdown.

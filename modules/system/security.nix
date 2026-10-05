@@ -15,10 +15,6 @@
   # firmware here). MacBook gets little benefit but it's harmless.
   services.fwupd.enable = true;
 
-  # Register hyprlock as a PAM service so it can verify the user
-  # password. Without this, unlock attempts may silently fail.
-  security.pam.services.hyprlock = { };
-
   # Allow the `audio` group to request realtime scheduling and pinned
   # memory — required for low-latency JACK/SuperCollider workloads
   # (TidalCycles). Harmless otherwise.

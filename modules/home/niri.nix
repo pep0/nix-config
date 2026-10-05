@@ -48,9 +48,6 @@ in
 
     prefer-no-csd
     spawn-at-startup "dbus-update-activation-environment" "--all"
-    spawn-at-startup "swaybg" "-m" "fill" "-i" "${config.stylix.image}"
-    spawn-at-startup "waybar"
-    spawn-at-startup "mako"
     spawn-at-startup "${pkgs.hyprpolkitagent}/libexec/hyprpolkitagent"
     spawn-at-startup "wl-clip-persist" "--clipboard" "regular"
     spawn-at-startup "poweralertd"
@@ -58,12 +55,14 @@ in
     binds {
         // App launches
         Mod+Return { spawn "kitty"; }
-        Mod+D      { spawn "fuzzel"; }
-        Mod+B      { spawn "firefox"; }
-        Mod+E      { spawn "thunar"; }
-        Mod+P      { spawn "powermenu"; }
-        Mod+N      { spawn "makoctl" "dismiss" "--all"; }
-        Mod+Escape { spawn "lock"; }
+        Mod+D       { spawn "noctalia" "msg" "panel-toggle" "launcher"; }
+        Mod+B       { spawn "firefox"; }
+        Mod+E       { spawn "thunar"; }
+        Mod+P       { spawn "noctalia" "msg" "panel-toggle" "session"; }
+        Mod+N       { spawn "noctalia" "msg" "panel-toggle" "control-center"; }
+        Mod+Shift+N { spawn "noctalia" "msg" "notification-dnd-toggle"; }
+        Mod+Comma   { spawn "noctalia" "msg" "settings-toggle"; }
+        Mod+Escape  { spawn "noctalia" "msg" "session" "lock"; }
 
         // Window management
         Mod+Q       { close-window; }
@@ -120,6 +119,11 @@ in
         XF86AudioNext { spawn "playerctl" "next"; }
         XF86AudioPrev { spawn "playerctl" "previous"; }
     }
+    window-rule {
+        match app-id="dev.noctalia.Noctalia"
+        open-floating true
+    }
+
     output "Dell Inc. DELL U2421E 7K69DP3" {
     mode "1920x1200@59.950"
     scale 1.0
