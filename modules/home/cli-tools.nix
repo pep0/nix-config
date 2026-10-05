@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 {
   # CLI tools installed into the home-manager profile so they show up
   # on every `make system` rebuild. `programs.<name>.enable` is used
@@ -84,6 +84,7 @@
 
     # ai / dev shells
     claude-code
+    inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.docker-sbx
     devenv
 
     # social

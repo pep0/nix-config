@@ -48,6 +48,9 @@
       url = "github:sadjow/claude-code-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # docker-sbx (Docker Sandboxes) — microVMs for coding agents.
+    llm-agents.url = "github:numtide/llm-agents.nix";
   };
 
   outputs = { self, nixpkgs, home-manager, nixos-hardware, lanzaboote, stylix, sops-nix, niri, claude-code-nix, ... }@inputs:
